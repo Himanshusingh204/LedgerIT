@@ -20,7 +20,27 @@ and pulled out of the normal order so they don't stall everything behind them.
   commit (`f091dd2`). Working tree is clean. This was `MASTER-PLAN.md` Tier 0 item 1 — the single
   highest-priority item in the whole plan, since every later phase (CI, PRs, safe rollback) depends
   on it existing. **Nothing pushed to a remote** — no GitHub/GitLab repo exists yet; that's Phase 2
-  below and needs you to create it.
+  below, deliberately deferred until you add a GitHub account/repo.
+
+- [x] **Phase 3 — Security headers + ownership-check comments + Node version pin.** Static headers
+  (`Strict-Transport-Security`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+  `Permissions-Policy`) added via `next.config.ts`'s `headers()`. Content-Security-Policy needed a
+  fresh nonce per request (so Next's own hydration/RSC inline scripts stay allowed), so it's built
+  and set in `lib/supabase/middleware.ts` instead, following Next.js's documented nonce pattern —
+  `script-src` uses `'nonce-<random>' 'strict-dynamic'`, `connect-src` is scoped to `'self'` plus
+  whatever `NEXT_PUBLIC_SUPABASE_URL` is currently set to (works for both the local stack and a
+  future hosted project without code changes), and `upgrade-insecure-requests` is only added in
+  production (it would otherwise silently break every browser call to the local Supabase stack's
+  plain-HTTP `127.0.0.1` API). Added a one-line ownership-check comment at each of the four actions
+  that rely solely on RLS (`updateTransactionAction`, `deleteTransactionAction`,
+  `archiveAccountAction`, `deleteBudgetAction`). Added `"engines": {"node": ">=20.9.0"}` to
+  `package.json`. **Verified, not just written:** confirmed via `curl` that all five static headers
+  and the CSP appear on a real response; confirmed via a headless-browser console check that
+  hydration still works (the marketing carousel's buttons render and mount) and there are zero CSP
+  violations or blocked-script errors — one real one was caught and fixed this way (React's dev-mode
+  `eval()` for debugging was getting blocked; fixed by allowing `'unsafe-eval'` outside production
+  only, since React itself never uses `eval()` in a production build). `tsc --noEmit`, `eslint`,
+  `vitest run` (14/14), and `next build` all pass clean. Commit: see git log.
 
 ---
 
@@ -38,19 +58,6 @@ Needs a decision + an account action before I can do anything here:
 
 Once you tell me (or create the empty remote yourself and paste the URL), I can add the remote and
 push in under a minute — the commit is already sitting there ready to go.
-
-### Phase 3 — Security headers + ownership-check comments + Node version pin
-
-Self-contained, no external accounts needed. From `MASTER-PLAN.md` Tier 1, items 1, 3, 5:
-- Add a `headers()` export to `next.config.ts`: `Strict-Transport-Security`,
-  `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, and a
-  Content-Security-Policy scoped to `'self'` + Supabase's domain.
-- Add a one-line comment at each of the four action functions that rely solely on RLS for ownership
-  (`updateTransactionAction`, `deleteTransactionAction`, `archiveAccountAction`,
-  `deleteBudgetAction`) explaining why that's correct and warning against "optimizing" it away.
-- Add `"engines": { "node": ">=20" }` to `package.json` (or an `.nvmrc`) so a fresh clone doesn't
-  silently pick up an incompatible Node version.
-- Verify: `tsc --noEmit`, `eslint`, `vitest run`, `next build` all still clean; commit.
 
 ### Phase 4 — Running account balances
 

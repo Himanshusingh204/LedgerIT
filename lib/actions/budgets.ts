@@ -44,6 +44,9 @@ export async function setBudgetAction(
 }
 
 export async function deleteBudgetAction(id: string): Promise<void> {
+  // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the budgets table), not by an
+  // explicit check here — do not "optimize" this by switching to a service-role client, which
+  // would bypass that check silently.
   const supabase = await createClient();
   await deleteBudget(supabase, id);
   revalidatePath("/budgets");

@@ -50,6 +50,9 @@ export async function createAccountAction(
 }
 
 export async function archiveAccountAction(id: string): Promise<void> {
+  // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the accounts table), not by an
+  // explicit check here — do not "optimize" this by switching to a service-role client, which
+  // would bypass that check silently.
   const supabase = await createClient();
   await archiveAccount(supabase, id);
   revalidatePath("/settings");

@@ -63,6 +63,9 @@ export async function updateTransactionAction(
     return { status: "error", fieldErrors: flattenFieldErrors(parsed.error) };
   }
 
+  // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the transactions table), not by
+  // an explicit check here — do not "optimize" this by switching to a service-role client, which
+  // would bypass that check silently.
   const supabase = await createClient();
   try {
     await updateTransaction(supabase, id, parsed.data);
@@ -76,6 +79,7 @@ export async function updateTransactionAction(
 }
 
 export async function deleteTransactionAction(id: string): Promise<void> {
+  // Ownership of `id` is enforced by RLS, same as updateTransactionAction above.
   const supabase = await createClient();
   await deleteTransaction(supabase, id);
   revalidatePath("/transactions");
