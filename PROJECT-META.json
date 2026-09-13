@@ -1,0 +1,13 @@
+{
+  "project": "expense-tracker",
+  "purpose": "Production planning pack for a deployable responsive expense tracker",
+  "reference_image": "public/design-reference/dashboard-reference.png",
+  "primary_docs": [
+    "README.md",
+    "docs/01-product-requirements.md",
+    "docs/02-system-architecture.md",
+    "docs/03-ui-ux-design-system.md",
+    "docs/04-development-plan.md",
+    "docs/05-ai-build-prompt.md"
+  ]
+}

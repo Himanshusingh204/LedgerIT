@@ -1,0 +1,31 @@
+[
+  {
+    "file": "public/images/calculator-and-budget-worksheet.jpg",
+    "source": "Rawpixel (Openverse-indexed)",
+    "author": "Unknown (Rawpixel public domain collection)",
+    "sourceUrl": "https://www.rawpixel.com/image/5912338/image-background-public-domain-note",
+    "license": "CC0 1.0 Universal (Public Domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "downloadedAt": "2026-09-14",
+    "notes": "Value-props section supporting image. Replaces an earlier generic tech-desk flatlay that didn't actually depict budgeting."
+  },
+  {
+    "file": "public/images/stack-of-shopping-receipts.jpg",
+    "source": "Rawpixel (Openverse-indexed)",
+    "author": "Unknown (Rawpixel public domain collection)",
+    "sourceUrl": "https://www.rawpixel.com/image/6032671/photo-image-paper-public-domain-note",
+    "license": "CC0 1.0 Universal (Public Domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "downloadedAt": "2026-09-14",
+    "notes": "How-it-works section supporting image. Replaces an earlier workspace flatlay that its alt text described as receipts but actually showed a MacBook and a UX sketch notebook."
+  },
+  {
+    "file": "public/images/coffee-and-receipts-on-counter.jpg",
+    "source": "Lorem Picsum (Unsplash-backed)",
+    "author": "Carli Jean",
+    "sourceUrl": "https://unsplash.com/photos/UWRqlJcDCXA",
+    "license": "Unsplash License",
+    "downloadedAt": "2026-09-13",
+    "notes": "Final CTA section background. Replaced an earlier candidate (Luke Chesser, unsplash.com/photos/1uxV8fAfhVM) that showed a visible Apple logo on a laptop lid — swapped for this logo-free shot per docs/03 imagery rules."
+  }
+]
