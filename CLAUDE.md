@@ -22,6 +22,10 @@ That file is unrelated to this plan — do not merge the two or let a scaffold r
    gap analysis vs docs/01-05, and the prioritized roadmap from "all phases done locally" to
    "deployed and defensible." Read this before starting any new session of work — it tracks what's
    left, not just what shipped.
+10. `TASKS.md` (project root) — breaks `MASTER-PLAN.md`'s roadmap into concrete, session-sized
+    phases with a done/next-up checklist, same spirit as this file's §3 but scoped to the
+    post-launch-readiness work. Check this first when resuming — it says exactly which phase to
+    pick up and flags anything that needs your input before it can start.
 
 ## 1. Decisions that override/clarify the docs
 
