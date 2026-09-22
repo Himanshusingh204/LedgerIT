@@ -77,6 +77,26 @@ export type SiteFeedback = {
   created_at: string;
 }
 
+export type AdminAuditLog = {
+  id: string;
+  admin_user_id: string | null;
+  action: string;
+  target_type: string;
+  target_id: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export type PlatformStats = {
+  user_count: number;
+  transaction_count: number;
+  feedback_count: number;
+  system_categories_count: number;
+  accounts_count: number;
+  budgets_count: number;
+  generated_at: string;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -128,12 +148,22 @@ export type Database = {
         Update: Partial<SiteFeedback>;
         Relationships: [];
       };
+      admin_audit_logs: {
+        Row: AdminAuditLog;
+        Insert: Partial<AdminAuditLog> & { action: string; target_type: string };
+        Update: Partial<AdminAuditLog>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
       is_admin: {
         Args: { check_user_id: string };
         Returns: boolean;
+      };
+      get_admin_stats: {
+        Args: Record<string, never>;
+        Returns: PlatformStats;
       };
     };
     Enums: Record<string, never>;
