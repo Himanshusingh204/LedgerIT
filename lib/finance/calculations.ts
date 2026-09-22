@@ -112,6 +112,28 @@ export function calculateTopMerchants(transactions: Transaction[], limit = 5): M
     .slice(0, limit);
 }
 
+/**
+ * Running balance = opening balance + income − expenses, for transactions posted to this account.
+ * Transfers are excluded, same as `calculateNetChange`/`calculateDailyTrend` — the `transactions`
+ * table has no destination account or in/out direction for a `transfer` row, just one `account_id`
+ * and an always-positive `amount`, so a transfer can't be resolved to money in or out of the
+ * account it's posted against without a schema change. Until one exists, a transfer won't move the
+ * balance shown on screen (see TASKS.md's Phase 4 entry for the full reasoning).
+ */
+export function calculateAccountBalance(
+  openingBalance: number,
+  transactions: Pick<Transaction, "type" | "amount">[],
+): number {
+  let balance = openingBalance;
+
+  for (const tx of transactions) {
+    if (tx.type === "income") balance += tx.amount;
+    if (tx.type === "expense") balance -= tx.amount;
+  }
+
+  return roundCurrency(balance);
+}
+
 function roundCurrency(value: number): number {
   return Math.round(value * 100) / 100;
 }

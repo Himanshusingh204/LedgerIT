@@ -37,6 +37,7 @@ export default async function BudgetsPage({ searchParams }: PageProps<"/budgets"
   let expenseCategories: Awaited<ReturnType<typeof listCategories>> = [];
   let budgetByCategoryId = new Map<string, { id: string; amount: number }>();
   let spentByCategoryId = new Map<string, number>();
+  let isTruncated = false;
 
   try {
     const profile = await getProfile(supabase, user.id);
@@ -45,7 +46,7 @@ export default async function BudgetsPage({ searchParams }: PageProps<"/budgets"
 
     const monthRange = buildDateRange("month", profile.timezone, new Date(`${monthStart}T12:00:00Z`));
 
-    const [categories, budgets, transactions] = await Promise.all([
+    const [categories, budgets, transactionsResult] = await Promise.all([
       listCategories(supabase),
       listBudgetsForMonth(supabase, user.id, monthStart),
       listTransactionsInRange(supabase, user.id, monthRange.start.toISOString(), monthRange.end.toISOString()),
@@ -53,8 +54,9 @@ export default async function BudgetsPage({ searchParams }: PageProps<"/budgets"
 
     expenseCategories = categories.filter((category) => category.kind === "expense");
     budgetByCategoryId = new Map(budgets.map((budget) => [budget.category_id, { id: budget.id, amount: budget.amount }]));
-    const spend = calculateCategorySpend(transactions);
+    const spend = calculateCategorySpend(transactionsResult.transactions);
     spentByCategoryId = new Map(spend.map((entry) => [entry.categoryId, entry.total]));
+    isTruncated = transactionsResult.isTruncated;
   } catch {
     loadError = true;
   }
@@ -78,6 +80,13 @@ export default async function BudgetsPage({ searchParams }: PageProps<"/budgets"
       <p className="mt-1 text-sm text-foreground-muted">
         Set a monthly limit per category and track how close you are to it.
       </p>
+
+      {isTruncated ? (
+        <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
+          This month has more transactions than can be shown at once — spent amounts below reflect
+          only part of it.
+        </p>
+      ) : null}
 
       {expenseCategories.length === 0 ? (
         <p className="mt-6 text-sm text-foreground-muted">No expense categories available yet.</p>

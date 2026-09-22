@@ -38,7 +38,13 @@ export async function updateProfileAction(
       currency: parsed.data.currency,
       timezone: parsed.data.timezone,
     });
-  } catch {
+  } catch (error) {
+    console.error("[action:profile] updateProfile failed", {
+      userId: user.id,
+      action: "updateProfile",
+      error: error instanceof Error ? error.message : String(error),
+      ts: new Date().toISOString(),
+    });
     return { status: "error", message: "Could not update your profile. Please try again." };
   }
 

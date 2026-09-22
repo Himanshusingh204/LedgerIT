@@ -159,7 +159,12 @@ site_url = "http://127.0.0.1:3000"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["https://127.0.0.1:3000"]
+# Both hostnames are needed: NEXT_PUBLIC_APP_URL (.env.local) uses "localhost", but this file's own
+# site_url above uses "127.0.0.1" — whichever host the browser is actually on when it hits an
+# auth email link (password reset, etc.) must be in this list or GoTrue silently drops the
+# `redirectTo` path/query and falls back to bare site_url, breaking the flow with no visible error.
+# Found this the hard way building password reset — see TASKS.md.
+additional_redirect_urls = ["http://localhost:3000/**", "http://127.0.0.1:3000/**", "https://127.0.0.1:3000/**"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # JWT issuer URL. If not set, defaults to auth.external_url.
@@ -210,10 +215,20 @@ token_verifications = 30
 web3 = 30
 
 # Configure one of the supported captcha providers: `hcaptcha`, `turnstile`.
+# Chosen provider for this project: Cloudflare Turnstile (free, no per-request quota, and the
+# frontend widget in components/auth/sign-up-form.tsx already expects it — see
+# NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env.example). To turn this on:
+#   1. Get a site key + secret at https://dash.cloudflare.com/?to=/:account/turnstile
+#   2. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY in .env.local (site key — public, safe in the browser)
+#   3. Uncomment the block below and set SUPABASE_AUTH_CAPTCHA_SECRET in the shell environment
+#      `supabase start` runs in (the secret — never put it in this file or .env.local directly)
+#   4. `npx supabase stop && npx supabase start` to pick up the config change
+# Until all four steps are done, sign-up has no bot protection beyond Supabase's built-in
+# rate limits above (auth.rate_limit.sign_in_sign_ups) — that's the current state.
 # [auth.captcha]
 # enabled = true
-# provider = "hcaptcha"
-# secret = ""
+# provider = "turnstile"
+# secret = "env(SUPABASE_AUTH_CAPTCHA_SECRET)"
 
 [auth.email]
 # Allow/disallow new user signups via email to your project.

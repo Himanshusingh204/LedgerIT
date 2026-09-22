@@ -21,9 +21,9 @@ export function RecentTransactions({
   const categoriesById = new Map(categories.map((category) => [category.id, category]));
 
   return (
-    <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-5">
+    <div className="card-surface p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-foreground-muted">Recent transactions</h2>
+        <h2 className="label-caps text-foreground-muted">Recent transactions</h2>
         <Link href="/transactions" className="text-sm font-medium text-primary hover:underline">
           View all
         </Link>
@@ -41,15 +41,15 @@ export function RecentTransactions({
             return (
               <li key={transaction.id} className="flex items-center justify-between gap-3 py-3">
                 <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-surface-muted text-foreground-muted">
-                    <CategoryIcon icon={category?.icon ?? "circle"} className="h-4 w-4" />
+                  <span className="grid h-10 w-10 flex-none place-items-center rounded-[var(--radius-control)] bg-surface-muted text-foreground-muted">
+                    <CategoryIcon icon={category?.icon ?? "circle"} className="h-[18px] w-[18px]" />
                   </span>
                   <div>
                     <p className="text-sm font-medium text-foreground">{transaction.merchant || "—"}</p>
-                    <p className="text-xs text-foreground-muted">{category?.name ?? "Uncategorized"}</p>
+                    <p className="label-caps text-foreground-muted">{category?.name ?? "Uncategorized"}</p>
                   </div>
                 </div>
-                <span className={`text-sm font-medium tabular-nums ${amountTone(transaction.type)}`}>
+                <span className={`text-num text-sm font-medium ${amountTone(transaction.type)}`}>
                   {formatSignedCurrency(transaction.type === "expense" ? -transaction.amount : transaction.amount, transaction.currency)}
                 </span>
               </li>

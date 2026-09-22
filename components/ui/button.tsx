@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type { ButtonHTMLAttributes } from "react";
 
 const variantClasses = {
-  primary: "bg-primary text-primary-foreground shadow-sm hover:opacity-90",
+  primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-semibold",
   ghost: "text-foreground-muted hover:bg-surface-muted hover:text-foreground",
   outline: "border border-border bg-surface text-foreground hover:bg-surface-muted",
 } as const;

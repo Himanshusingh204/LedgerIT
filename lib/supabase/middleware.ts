@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/types/database";
 
 const PROTECTED_PREFIXES = ["/dashboard", "/transactions", "/budgets", "/analytics", "/settings"];
+const ADMIN_PREFIX = "/admin";
 
 /**
  * Content-Security-Policy is built per-request (not in next.config.ts) because it needs a fresh
@@ -12,7 +13,13 @@ const PROTECTED_PREFIXES = ["/dashboard", "/transactions", "/budgets", "/analyti
  * Everything that doesn't need a nonce (HSTS, X-Frame-Options, etc.) lives in next.config.ts.
  */
 function buildCsp(nonce: string, supabaseUrl: string | undefined): string {
-  const connectSrc = ["'self'", supabaseUrl].filter(Boolean).join(" ");
+  // Cloudflare Turnstile (sign-up bot-protection widget — see components/auth/sign-up-form.tsx)
+  // is inert until NEXT_PUBLIC_TURNSTILE_SITE_KEY is set, but the CSP allowances are unconditional
+  // so the widget works the moment a site key is added, with no CSP change needed at that point.
+  // Its loader script gets the same request nonce Next.js applies to every next/script tag (see
+  // the doc link below), so it doesn't need a script-src host entry — but the iframe it renders
+  // and the verification calls it makes do need explicit frame-src/connect-src allowances.
+  const connectSrc = ["'self'", supabaseUrl, "https://challenges.cloudflare.com"].filter(Boolean).join(" ");
 
   const isProduction = process.env.NODE_ENV === "production";
 
@@ -29,6 +36,7 @@ function buildCsp(nonce: string, supabaseUrl: string | undefined): string {
     "img-src 'self' blob: data:",
     "font-src 'self'",
     `connect-src ${connectSrc}`,
+    "frame-src https://challenges.cloudflare.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -68,6 +76,8 @@ export async function updateSession(request: NextRequest) {
     supabaseUrl,
     supabaseKey,
     {
+      // Keep in sync with lib/supabase/client.ts and server.ts.
+      cookieOptions: { secure: process.env.NODE_ENV === "production" },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -87,13 +97,25 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) => request.nextUrl.pathname.startsWith(prefix));
+  const isAdminRoute = request.nextUrl.pathname.startsWith(ADMIN_PREFIX);
 
-  if (!user && isProtected) {
+  if (!user && (isProtected || isAdminRoute)) {
     const signInUrl = new URL("/sign-in", request.url);
     signInUrl.searchParams.set("redirectTo", request.nextUrl.pathname);
     const redirectResponse = NextResponse.redirect(signInUrl);
     redirectResponse.headers.set("Content-Security-Policy", csp);
     return redirectResponse;
+  }
+
+  // Admin check happens server-side on every request (not just at login) — a
+  // user demoted from admin loses access on their very next navigation.
+  if (user && isAdminRoute) {
+    const { data: userIsAdmin } = await supabase.rpc("is_admin", { check_user_id: user.id });
+    if (!userIsAdmin) {
+      const redirectResponse = NextResponse.redirect(new URL("/dashboard", request.url));
+      redirectResponse.headers.set("Content-Security-Policy", csp);
+      return redirectResponse;
+    }
   }
 
   return supabaseResponse;

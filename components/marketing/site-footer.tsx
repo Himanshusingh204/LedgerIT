@@ -16,6 +16,7 @@ export function SiteFooter() {
           <a href="#why" className="hover:text-foreground">Why Clearledger</a>
           <a href="#how-it-works" className="hover:text-foreground">How it works</a>
           <a href="#features" className="hover:text-foreground">Features</a>
+          <a href="#feedback" className="hover:text-foreground">Feedback</a>
           <Link href="/sign-in" className="hover:text-foreground">Sign in</Link>
         </nav>
 

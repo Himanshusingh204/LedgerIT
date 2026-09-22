@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/data/profile";
 import { listAccounts } from "@/lib/data/accounts";
+import { listCategories } from "@/lib/data/categories";
 import { ProfileForm } from "@/components/settings/profile-form";
 import { AccountList } from "@/components/settings/account-list";
+import { CategoryList } from "@/components/settings/category-list";
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -26,9 +28,14 @@ export default async function SettingsPage() {
   let loadError = false;
   let profile: Awaited<ReturnType<typeof getProfile>> | null = null;
   let accounts: Awaited<ReturnType<typeof listAccounts>> = [];
+  let categories: Awaited<ReturnType<typeof listCategories>> = [];
 
   try {
-    [profile, accounts] = await Promise.all([getProfile(supabase, user.id), listAccounts(supabase, user.id)]);
+    [profile, accounts, categories] = await Promise.all([
+      getProfile(supabase, user.id),
+      listAccounts(supabase, user.id),
+      listCategories(supabase),
+    ]);
   } catch {
     loadError = true;
   }
@@ -56,6 +63,10 @@ export default async function SettingsPage() {
 
       <section className="mt-4">
         <AccountList accounts={accounts} />
+      </section>
+
+      <section className="mt-4">
+        <CategoryList categories={categories} />
       </section>
     </div>
   );

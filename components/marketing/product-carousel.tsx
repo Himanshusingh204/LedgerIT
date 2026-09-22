@@ -138,7 +138,7 @@ export function ProductCarousel() {
         </div>
       </div>
 
-      <div className="mt-4 flex gap-1.5" role="tablist" aria-label="Choose slide">
+      <div className="mt-4 flex" role="tablist" aria-label="Choose slide">
         {SLIDES.map((s, i) => (
           <button
             key={s.title}
@@ -149,8 +149,13 @@ export function ProductCarousel() {
               setDirection(i > index ? 1 : -1);
               setIndex(i);
             }}
-            className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-primary" : "w-1.5 bg-border"}`}
-          />
+            className="grid h-6 w-6 flex-none place-items-center"
+          >
+            <span
+              aria-hidden
+              className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-primary" : "w-1.5 bg-border"}`}
+            />
+          </button>
         ))}
       </div>
 

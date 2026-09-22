@@ -62,6 +62,21 @@ export type Budget = {
   updated_at: string;
 }
 
+export type AdminUser = {
+  user_id: string;
+  granted_by: string | null;
+  created_at: string;
+}
+
+export type SiteFeedback = {
+  id: string;
+  user_id: string | null;
+  name: string;
+  email: string | null;
+  message: string;
+  created_at: string;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -101,9 +116,26 @@ export type Database = {
         Update: Partial<Budget>;
         Relationships: [];
       };
+      admin_users: {
+        Row: AdminUser;
+        Insert: Partial<AdminUser> & { user_id: string };
+        Update: Partial<AdminUser>;
+        Relationships: [];
+      };
+      site_feedback: {
+        Row: SiteFeedback;
+        Insert: Partial<SiteFeedback> & { name: string; message: string };
+        Update: Partial<SiteFeedback>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      is_admin: {
+        Args: { check_user_id: string };
+        Returns: boolean;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

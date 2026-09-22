@@ -2,6 +2,10 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/database";
 
+// Keep in sync with lib/supabase/client.ts — see the comment there for why `secure` is set
+// explicitly (the library's own defaults never set it) and `httpOnly` deliberately isn't.
+const cookieOptions = { secure: process.env.NODE_ENV === "production" };
+
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -9,6 +13,7 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions,
       cookies: {
         getAll() {
           return cookieStore.getAll();

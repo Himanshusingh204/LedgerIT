@@ -34,7 +34,15 @@ export async function setBudgetAction(
 
   try {
     await upsertBudget(supabase, user.id, parsed.data.categoryId, parsed.data.monthStart, parsed.data.amount);
-  } catch {
+  } catch (error) {
+    console.error("[action:budgets] upsertBudget failed", {
+      userId: user.id,
+      categoryId: parsed.data.categoryId,
+      monthStart: parsed.data.monthStart,
+      action: "upsertBudget",
+      error: error instanceof Error ? error.message : String(error),
+      ts: new Date().toISOString(),
+    });
     return { status: "error", message: "Could not save the budget. Please try again." };
   }
 
@@ -44,11 +52,19 @@ export async function setBudgetAction(
 }
 
 export async function deleteBudgetAction(id: string): Promise<void> {
-  // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the budgets table), not by an
-  // explicit check here — do not "optimize" this by switching to a service-role client, which
-  // would bypass that check silently.
-  const supabase = await createClient();
-  await deleteBudget(supabase, id);
-  revalidatePath("/budgets");
-  revalidatePath("/analytics");
+  try {
+    // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the budgets table)
+    const supabase = await createClient();
+    await deleteBudget(supabase, id);
+    revalidatePath("/budgets");
+    revalidatePath("/analytics");
+  } catch (error) {
+    console.error("[action:budgets] deleteBudget failed", {
+      budgetId: id,
+      action: "deleteBudget",
+      error: error instanceof Error ? error.message : String(error),
+      ts: new Date().toISOString(),
+    });
+    throw error;
+  }
 }

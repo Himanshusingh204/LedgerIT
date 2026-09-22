@@ -5,6 +5,7 @@ import {
   calculateBudgetProgress,
   calculateDailyTrend,
   calculateTopMerchants,
+  calculateAccountBalance,
 } from "@/lib/finance/calculations";
 import type { Transaction } from "@/types/database";
 
@@ -132,5 +133,31 @@ describe("calculateTopMerchants", () => {
     );
 
     expect(result).toEqual([{ merchant: "Grocery Store", total: 60 }]);
+  });
+});
+
+describe("calculateAccountBalance", () => {
+  it("adds income and subtracts expenses from the opening balance", () => {
+    const transactions = [
+      tx({ type: "income", amount: 1000 }),
+      tx({ type: "expense", amount: 64.5 }),
+      tx({ type: "expense", amount: 28 }),
+    ];
+
+    expect(calculateAccountBalance(500, transactions)).toBe(1407.5);
+  });
+
+  it("excludes transfers", () => {
+    const transactions = [tx({ type: "transfer", amount: 200 })];
+    expect(calculateAccountBalance(500, transactions)).toBe(500);
+  });
+
+  it("returns the opening balance unchanged with no transactions", () => {
+    expect(calculateAccountBalance(120, [])).toBe(120);
+  });
+
+  it("allows a negative balance", () => {
+    const transactions = [tx({ type: "expense", amount: 200 })];
+    expect(calculateAccountBalance(50, transactions)).toBe(-150);
   });
 });

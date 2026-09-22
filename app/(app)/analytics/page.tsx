@@ -47,24 +47,26 @@ export default async function AnalyticsPage({ searchParams }: PageProps<"/analyt
   let categorySpend = calculateCategorySpend([]);
   let trend = calculateDailyTrend([]);
   let topMerchants = calculateTopMerchants([]);
+  let isTruncated = false;
 
   try {
     const profile = await getProfile(supabase, user.id);
     const currentRange = buildDateRange(range, profile.timezone);
     const previousRange = calculatePreviousPeriod(currentRange);
 
-    const [currentTransactions, previousTransactions, categoryList] = await Promise.all([
+    const [current, previous, categoryList] = await Promise.all([
       listTransactionsInRange(supabase, user.id, currentRange.start.toISOString(), currentRange.end.toISOString()),
       listTransactionsInRange(supabase, user.id, previousRange.start.toISOString(), previousRange.end.toISOString()),
       listCategories(supabase),
     ]);
 
     categories = categoryList;
-    totals = calculateNetChange(currentTransactions);
-    previousTotals = calculateNetChange(previousTransactions);
-    categorySpend = calculateCategorySpend(currentTransactions);
-    trend = calculateDailyTrend(currentTransactions);
-    topMerchants = calculateTopMerchants(currentTransactions);
+    totals = calculateNetChange(current.transactions);
+    previousTotals = calculateNetChange(previous.transactions);
+    categorySpend = calculateCategorySpend(current.transactions);
+    trend = calculateDailyTrend(current.transactions);
+    topMerchants = calculateTopMerchants(current.transactions);
+    isTruncated = current.isTruncated;
   } catch {
     loadError = true;
   }
@@ -85,6 +87,13 @@ export default async function AnalyticsPage({ searchParams }: PageProps<"/analyt
         <h1 className="text-2xl font-semibold text-foreground">Analytics</h1>
         <RangeSelector current={range} />
       </div>
+
+      {isTruncated ? (
+        <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
+          This period has more transactions than can be shown at once — totals and charts below
+          reflect only part of it. Try a narrower date range for exact numbers.
+        </p>
+      ) : null}
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <KpiCard label="Income" value={totals.incomeTotal} previousValue={previousTotals.incomeTotal} tone="positive" />

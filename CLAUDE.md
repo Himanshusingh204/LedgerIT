@@ -89,9 +89,11 @@ Mark `[x]` when a phase is functionally complete (builds, typechecks, has the st
 ## 6. Where things live (once scaffolded)
 
 See `docs/02-system-architecture.md §repository structure` for the full tree. Key entry points:
-- Landing page: `app/(marketing)/page.tsx` + `app/(marketing)/components/`
+- Landing page: `app/(marketing)/page.tsx` + `app/(marketing)/layout.tsx`, components in `components/marketing/`
 - Auth pages: `app/(auth)/{sign-in,sign-up,callback}` (shared shell in `app/(auth)/layout.tsx`)
 - Authenticated app: `app/(app)/{dashboard,transactions,budgets,analytics,settings}` — all share one nav shell via `app/(app)/layout.tsx` + `components/layout/app-shell.tsx`. The `(app)` segment is a route group only — it does not appear in the URL (`/dashboard`, not `/app/dashboard`).
+- Admin: `app/admin/{layout,page}.tsx` — a real (non-grouped) segment, so its URL is `/admin`. Gated in `lib/supabase/middleware.ts` by both a redirect (non-admins bounced to `/dashboard`) and RLS via the `is_admin()` Postgres function — never trust the redirect alone.
+- Architecture, file structure, and data-flow reference: `ARCHITECTURE.md` (project root).
 - Finance domain: `lib/finance/`
 - Data access: `lib/data/`
 - Server actions: `lib/actions/` (auth, transactions, budgets, accounts, profile — each pairs with a `lib/validations/*` schema)

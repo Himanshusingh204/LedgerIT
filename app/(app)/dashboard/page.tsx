@@ -6,6 +6,7 @@ import { listCategories } from "@/lib/data/categories";
 import type { RangeKey } from "@/lib/finance/date-range";
 import { RangeSelector } from "@/components/dashboard/range-selector";
 import { KpiCard } from "@/components/dashboard/kpi-card";
+import { BudgetMeter } from "@/components/dashboard/budget-meter";
 import { CategorySpendChart } from "@/components/dashboard/category-spend-chart";
 import { RecentTransactions } from "@/components/dashboard/recent-transactions";
 import { AccountsSummary } from "@/components/dashboard/accounts-summary";
@@ -61,14 +62,37 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+        <div>
+          <p className="label-caps text-foreground-muted">Overview</p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-foreground">Dashboard</h1>
+        </div>
         <RangeSelector current={range} />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <KpiCard label="Income" value={snapshot.totals.incomeTotal} previousValue={snapshot.previousTotals.incomeTotal} tone="positive" />
-        <KpiCard label="Expenses" value={snapshot.totals.expenseTotal} previousValue={snapshot.previousTotals.expenseTotal} tone="negative" />
+      {snapshot.isTruncated ? (
+        <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
+          This period has more transactions than can be shown at once — totals and charts below
+          reflect only part of it. Try a narrower date range for exact numbers.
+        </p>
+      ) : null}
+
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <KpiCard
+          label="Income"
+          value={snapshot.totals.incomeTotal}
+          previousValue={snapshot.previousTotals.incomeTotal}
+          tone="positive"
+          trend={snapshot.dailyTrend.map((point) => point.incomeTotal)}
+        />
+        <KpiCard
+          label="Expenses"
+          value={snapshot.totals.expenseTotal}
+          previousValue={snapshot.previousTotals.expenseTotal}
+          tone="negative"
+          trend={snapshot.dailyTrend.map((point) => point.expenseTotal)}
+        />
         <KpiCard label="Net change" value={snapshot.totals.netChange} previousValue={snapshot.previousTotals.netChange} />
+        <BudgetMeter progress={snapshot.monthlyBudget} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">

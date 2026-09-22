@@ -49,7 +49,8 @@ export function AccountList({ accounts }: { accounts: Account[] }) {
                   {account.last_four ? <span className="text-foreground-muted"> ····{account.last_four}</span> : null}
                 </p>
                 <p className="text-xs text-foreground-muted">
-                  {ACCOUNT_TYPE_LABELS[account.type]} · {formatCurrency(account.opening_balance, account.currency)}
+                  {ACCOUNT_TYPE_LABELS[account.type]} · Opening balance:{" "}
+                  {formatCurrency(account.opening_balance, account.currency)}
                 </p>
               </div>
               <button

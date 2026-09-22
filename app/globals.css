@@ -1,24 +1,113 @@
 @import "tailwindcss";
 
 :root {
+  /* ── Base surfaces ───────────────────────────────────────────────── */
   --background: #f7f9fc;
   --surface: #ffffff;
   --surface-muted: #eef2f8;
-  --foreground: #12192b;
-  --foreground-muted: #5b6478;
-  --border: #e2e7f0;
-  --primary: #2452eb;
+  --foreground: #0f172a;
+  --foreground-muted: #334155; /* WCAG AAA high contrast (7.5:1 on white/light) */
+  --border: #e2e8f0;
+
+  /* ── Brand ───────────────────────────────────────────────────────── */
+  --primary: #1d4ed8;
   --primary-foreground: #ffffff;
+  --primary-light: #3b82f6;
+  --primary-subtle: #eff6ff;
+
+  /* ── Semantic ────────────────────────────────────────────────────── */
   --success: #16824c;
   --warning: #b4650a;
   --danger: #c62f3f;
-  --chart-1: #2452eb;
+
+  /* ── Charts ──────────────────────────────────────────────────────── */
+  --chart-1: #1d4ed8;
   --chart-2: #16b3a8;
   --chart-3: #e28c2c;
 
+  /* ── Radii ───────────────────────────────────────────────────────── */
   --radius-control: 0.5rem;
-  --radius-surface: 0.75rem;
+  --radius-surface: 0.875rem;
   --radius-surface-lg: 1.125rem;
+
+  /* ── Shadows ─────────────────────────────────────────────────────── */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 8px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 8px 32px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.22);
+  --shadow-glow-sm: 0 0 16px rgba(48, 43, 99, 0.14);
+
+  /* ── Premium Midnight Gradient Tokens (#24243e, #302b63, #0f0c29) ── */
+  --gradient-midnight: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+  --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #302b63 100%);
+  --gradient-cta: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
+  --gradient-success: linear-gradient(135deg, #16824c 0%, #10b981 100%);
+
+  /* Gradient mesh — layered radial gradients for the hero background */
+  --gradient-mesh-1: radial-gradient(ellipse at 20% 10%, rgba(48, 43, 99, 0.22) 0%, transparent 55%);
+  --gradient-mesh-2: radial-gradient(ellipse at 85% 5%,  rgba(36, 36, 62, 0.18) 0%, transparent 50%);
+  --gradient-mesh-3: radial-gradient(ellipse at 60% 80%, rgba(29, 78, 216, 0.12) 0%, transparent 45%);
+  --gradient-mesh-4: radial-gradient(ellipse at 0%  60%, rgba(15, 12, 41, 0.16) 0%, transparent 45%);
+
+  /* ── Glassmorphism ───────────────────────────────────────────────── */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg-dark: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border-dark: rgba(255, 255, 255, 0.14);
+  --glass-blur: blur(16px) saturate(180%);
+  --glass-header-bg: rgba(255, 255, 255, 0.88);
+}
+
+/* ── Dark mode token overrides (Midnight Obsidian Palette) ────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0f0c29;
+    --surface: #17153a;
+    --surface-muted: #24243e;
+    --foreground: #f8fafc;
+    --foreground-muted: #94a3b8; /* WCAG AAA contrast on dark */
+    --border: #2e2a58;
+
+    --primary: #60a5fa;
+    --primary-light: #93c5fd;
+    --primary-subtle: #24243e;
+
+    --success: #3fb27a;
+    --warning: #d4810f;
+    --danger: #e05260;
+
+    --shadow-card: 0 1px 2px rgba(0,0,0, 0.4), 0 1px 8px rgba(0,0,0, 0.3);
+    --shadow-card-hover: 0 8px 32px rgba(0,0,0, 0.55), 0 2px 8px rgba(0,0,0, 0.35);
+    --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.45);
+
+    --glass-bg: rgba(23, 21, 58, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.10);
+    --glass-header-bg: rgba(15, 12, 41, 0.92);
+  }
+}
+
+:root[data-theme="dark"], .dark {
+  --background: #0f0c29;
+  --surface: #17153a;
+  --surface-muted: #24243e;
+  --foreground: #f8fafc;
+  --foreground-muted: #94a3b8;
+  --border: #2e2a58;
+
+  --primary: #60a5fa;
+  --primary-light: #93c5fd;
+  --primary-subtle: #24243e;
+
+  --success: #3fb27a;
+  --warning: #d4810f;
+  --danger: #e05260;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0, 0.4), 0 1px 8px rgba(0,0,0, 0.3);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0, 0.55), 0 2px 8px rgba(0,0,0, 0.35);
+  --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.45);
+
+  --glass-bg: rgba(23, 21, 58, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-header-bg: rgba(15, 12, 41, 0.92);
 }
 
 @theme inline {
@@ -39,7 +128,8 @@
   --radius-control: var(--radius-control);
   --radius-surface: var(--radius-surface);
   --radius-surface-lg: var(--radius-surface-lg);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-hanken-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -61,4 +151,169 @@ body {
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* ── Ledger typography ──────────────────────────────────────────────── */
+/* Uppercase tracked-out captions above every stat/label */
+.label-caps {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Monospace numerals for currency/count figures */
+.text-num {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.01em;
+}
+
+/* ── Card surfaces ──────────────────────────────────────────────────── */
+.card-surface {
+  border-radius: var(--radius-surface);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.card-glass {
+  border-radius: var(--radius-surface-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* ── Gradient text clip ─────────────────────────────────────────────── */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Gradient mesh background ───────────────────────────────────────── */
+.gradient-mesh {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse at 25% 15%, rgba(48, 43, 99, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 5%,  rgba(36, 36, 62, 0.24) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(29, 78, 216, 0.16) 0%, transparent 45%);
+}
+
+/* ── Marquee animation ──────────────────────────────────────────────── */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 40s linear infinite;
+}
+.marquee-track-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 35s linear infinite;
+}
+.marquee-wrap:hover .marquee-track,
+.marquee-wrap:hover .marquee-track-reverse {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .marquee-track-reverse {
+    animation: none;
+  }
+}
+
+/* ── Gradient border card (pricing) ─────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  border-radius: var(--radius-surface-lg);
+  background: var(--surface);
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: calc(var(--radius-surface-lg) + 1.5px);
+  background: var(--gradient-primary);
+  z-index: -1;
+}
+
+/* ── Pulsing dot indicator ──────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* ── Grain texture overlay ──────────────────────────────────────────── */
+.grain-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ── Premium Midnight Metallic CTA Button (#24243e, #302b63, #1d4ed8) ── */
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(48, 43, 99, 0.4), 0 0 28px rgba(36, 36, 62, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(29, 78, 216, 0.45), 0 0 36px rgba(48, 43, 99, 0.35);
+  }
+}
+
+.btn-color-changing {
+  background: linear-gradient(
+    135deg,
+    #1d4ed8 0%,
+    #302b63 35%,
+    #24243e 65%,
+    #1d4ed8 100%
+  );
+  background-size: 300% 300%;
+  animation: gradient-flow 6s ease infinite, pulse-glow 3.5s ease-in-out infinite;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-color-changing:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(48, 43, 99, 0.6);
+}
+
+.btn-color-changing:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-color-changing {
+    animation: none;
+    background: var(--gradient-primary);
+  }
 }

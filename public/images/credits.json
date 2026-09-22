@@ -27,5 +27,32 @@
     "license": "Unsplash License",
     "downloadedAt": "2026-09-13",
     "notes": "Final CTA section background. Replaced an earlier candidate (Luke Chesser, unsplash.com/photos/1uxV8fAfhVM) that showed a visible Apple logo on a laptop lid — swapped for this logo-free shot per docs/03 imagery rules."
+  },
+  {
+    "file": "public/images/stacking-coins-savings.jpg",
+    "source": "Unsplash",
+    "author": "Towfiqu barbhuiya",
+    "sourceUrl": "https://unsplash.com/photos/jpqyfK7GB4w",
+    "license": "Unsplash License",
+    "downloadedAt": "2026-09-15",
+    "notes": "2026-09-15 landing page redesign, hero image. Sourced from unsplash.com/s/photos/expense-tracker per user request. Three other candidates from the same search (a desk/laptop/phone shot, a bills-and-calculator shot, a clipboard checklist) were downloaded and rejected after visual inspection — one showed a visible MacBook/Apple keyboard, one was actually a competitor utility bill with a Trustpilot badge and a cartoon mascot, one was a CBD/cannabis product review clipboard with branded business cards. All three deleted, never referenced in code."
+  },
+  {
+    "file": "public/images/budget-planning-pen-calculator.jpg",
+    "source": "Unsplash",
+    "author": "Kelly Sikkema",
+    "sourceUrl": "https://unsplash.com/photos/xoU52jUVUXA",
+    "license": "Unsplash License",
+    "downloadedAt": "2026-09-15",
+    "notes": "2026-09-15 landing page redesign, feature-highlights section image. Real US tax forms + calculator, no visible branding."
+  },
+  {
+    "file": "public/images/notebook-with-pen-planning.jpg",
+    "source": "Unsplash",
+    "author": "My Profit Tutor",
+    "sourceUrl": "https://unsplash.com/photos/v30bSAWzp4I",
+    "license": "Unsplash License",
+    "downloadedAt": "2026-09-15",
+    "notes": "2026-09-15 landing page redesign, how-it-works section image. Daily planner with handwritten task list, no visible branding."
   }
 ]

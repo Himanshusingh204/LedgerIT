@@ -16,22 +16,16 @@ test.describe("core app flow", () => {
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     });
 
+    // Assumes email confirmation is disabled in the Supabase project's auth settings for
+    // local/dev testing — sign-up returns a live session immediately and lands on /dashboard
+    // directly (components/auth/sign-up-form.tsx branches on this). Otherwise it shows a "check
+    // your email" screen instead and this step would need to confirm the email first.
     await test.step("sign up", async () => {
       await page.goto("/sign-up");
       await page.getByLabel("Name").fill("E2E Test User");
       await page.getByLabel("Email").fill(email);
       await page.getByLabel("Password").fill(password);
       await page.getByRole("button", { name: "Create account" }).click();
-      await expect(page.getByText("Check your email")).toBeVisible();
-    });
-
-    // Assumes email confirmation is disabled in the Supabase project's auth settings
-    // for local/dev testing, otherwise this step must confirm the email first.
-    await test.step("sign in", async () => {
-      await page.goto("/sign-in");
-      await page.getByLabel("Email").fill(email);
-      await page.getByLabel("Password").fill(password);
-      await page.getByRole("button", { name: "Sign in" }).click();
       await expect(page).toHaveURL(/\/dashboard/);
     });
 
@@ -90,11 +84,25 @@ test.describe("core app flow", () => {
       await expect(page.getByText("Employer").filter({ visible: true })).not.toBeVisible();
     });
 
-    await test.step("export CSV", async () => {
+    await test.step("export CSV and verify its contents", async () => {
       const downloadPromise = page.waitForEvent("download");
       await page.getByRole("link", { name: "Export CSV" }).click();
       const download = await downloadPromise;
       expect(download.suggestedFilename()).toMatch(/^transactions-.*\.csv$/);
+
+      // The list is still filtered to "Grocery" from the previous step — the export should
+      // respect that filter (lib/data/transactions.ts's export route reads the same query params
+      // the ledger page does), so the CSV should contain the grocery expense and NOT the income.
+      const stream = await download.createReadStream();
+      const chunks: Buffer[] = [];
+      for await (const chunk of stream!) chunks.push(chunk as Buffer);
+      const csv = Buffer.concat(chunks).toString("utf-8");
+
+      expect(csv).toContain("Grocery Store");
+      expect(csv).toContain("42.50");
+      expect(csv).not.toContain("Employer");
+      // Never leak raw account/category ids into an exported file a user might share.
+      expect(csv).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
     });
 
     await test.step("mobile navigation works", async () => {
@@ -103,6 +111,38 @@ test.describe("core app flow", () => {
       await page.getByRole("button", { name: "Open menu" }).click();
       await page.getByRole("link", { name: "Transactions" }).click();
       await expect(page).toHaveURL(/\/transactions/);
+      await page.setViewportSize({ width: 1280, height: 800 });
     });
+
+    await test.step("edit the budget amount", async () => {
+      await page.goto("/budgets");
+      await page.getByRole("button", { name: "Edit" }).first().click();
+      await page.getByRole("spinbutton").first().fill("250");
+      await page.getByRole("button", { name: "Save" }).click();
+      await expect(page.getByText("$250.00")).toBeVisible();
+    });
+
+    await test.step("remove the budget", async () => {
+      await page.getByRole("button", { name: "Remove" }).first().click();
+      await expect(page.getByText("No budget set").first()).toBeVisible();
+    });
+
+    await test.step("archive the account", async () => {
+      await page.goto("/settings");
+      // account-list.tsx confirms via window.confirm() before archiving — Playwright auto-dismisses
+      // browser dialogs unless a handler explicitly accepts them.
+      page.once("dialog", (dialog) => dialog.accept());
+      await page.getByRole("button", { name: "Archive Everyday checking" }).click();
+      await expect(page.getByText("Everyday checking")).not.toBeVisible();
+    });
+  });
+
+  test("a failed sign-in shows an error and does not navigate away", async ({ page }) => {
+    await page.goto("/sign-in");
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Password").fill("WrongPassword123!");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByText(/incorrect email or password/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/sign-in/);
   });
 });

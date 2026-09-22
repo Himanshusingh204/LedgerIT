@@ -1,13 +1,28 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef } from "react";
+import { useActionState, useEffect, useId, useRef, useState } from "react";
+import { Paperclip } from "lucide-react";
 import type { Account, Category, Transaction, TransactionType } from "@/types/database";
 import { createTransactionAction, updateTransactionAction, type TransactionActionState } from "@/lib/actions/transactions";
+import { RECEIPT_ALLOWED_MIME_TYPES, RECEIPT_MAX_BYTES } from "@/lib/data/receipts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const initialState: TransactionActionState = { status: "idle" };
+const RECEIPT_ACCEPT = RECEIPT_ALLOWED_MIME_TYPES.join(",");
+
+/** Client-side pre-check only — matches, but does not replace, the bucket-level and
+ * lib/data/receipts.ts server-side validation. Lets a bad file fail before an upload even starts. */
+function validateReceiptFile(file: File): string | null {
+  if (!RECEIPT_ALLOWED_MIME_TYPES.includes(file.type as (typeof RECEIPT_ALLOWED_MIME_TYPES)[number])) {
+    return "Receipts must be a JPEG, PNG, WEBP, or PDF file.";
+  }
+  if (file.size > RECEIPT_MAX_BYTES) {
+    return "Receipts must be under 5 MB.";
+  }
+  return null;
+}
 
 const TYPE_OPTIONS: { value: TransactionType; label: string }[] = [
   { value: "expense", label: "Expense" },
@@ -36,6 +51,7 @@ export function TransactionForm({
     : createTransactionAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
   const wasPending = useRef(false);
+  const [receiptError, setReceiptError] = useState<string | null>(null);
 
   useEffect(() => {
     if (wasPending.current && !isPending && state.status === "idle") {
@@ -139,6 +155,29 @@ export function TransactionForm({
       </div>
 
       <div>
+        <Label htmlFor={`${formId}-receipt`}>Receipt (optional)</Label>
+        {transaction?.receipt_url ? (
+          <p className="mb-1.5 flex items-center gap-1.5 text-xs text-foreground-muted">
+            <Paperclip className="h-3.5 w-3.5" aria-hidden />
+            A receipt is already attached — choose a file to replace it.
+          </p>
+        ) : null}
+        <input
+          id={`${formId}-receipt`}
+          name="receipt"
+          type="file"
+          accept={RECEIPT_ACCEPT}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            setReceiptError(file ? validateReceiptFile(file) : null);
+          }}
+          className="block w-full text-sm text-foreground file:mr-3 file:rounded-[var(--radius-control)] file:border-0 file:bg-surface-muted file:px-3 file:py-2 file:text-sm file:font-medium file:text-foreground hover:file:bg-border"
+        />
+        <p className="mt-1 text-xs text-foreground-muted">JPEG, PNG, WEBP, or PDF, up to 5 MB.</p>
+        {receiptError ? <p className="mt-1.5 text-sm text-danger">{receiptError}</p> : null}
+      </div>
+
+      <div>
         <Label htmlFor={`${formId}-note`}>Note</Label>
         <textarea
           id={`${formId}-note`}
@@ -159,7 +198,7 @@ export function TransactionForm({
         <Button type="button" variant="outline" onClick={onSuccess}>
           Cancel
         </Button>
-        <Button type="submit" isLoading={isPending}>
+        <Button type="submit" isLoading={isPending} disabled={!!receiptError}>
           Save transaction
         </Button>
       </div>

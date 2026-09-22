@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MailCheck } from "lucide-react";
@@ -11,24 +13,54 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function SignUpForm() {
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+declare global {
+  interface Window {
+    onTurnstileVerify?: (token: string) => void;
+    onTurnstileExpire?: () => void;
+  }
+}
+
+export function SignUpForm({ nonce }: { nonce?: string }) {
+  const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignUpValues>({ resolver: zodResolver(signUpSchema) });
 
+  // Turnstile calls these by name (data-callback/data-expired-callback), so they have to live on
+  // window rather than as plain React closures — the widget is rendered outside React's control.
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    window.onTurnstileVerify = (token: string) => setCaptchaToken(token);
+    window.onTurnstileExpire = () => setCaptchaToken(null);
+    return () => {
+      delete window.onTurnstileVerify;
+      delete window.onTurnstileExpire;
+    };
+  }, []);
+
   async function onSubmit(values: SignUpValues) {
     setFormError(null);
+
+    if (TURNSTILE_SITE_KEY && !captchaToken) {
+      setFormError("Please complete the verification challenge.");
+      return;
+    }
+
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
       options: {
         data: { display_name: values.displayName },
         emailRedirectTo: `${window.location.origin}/callback`,
+        captchaToken: captchaToken ?? undefined,
       },
     });
 
@@ -38,6 +70,15 @@ export function SignUpForm() {
           ? "An account with this email already exists."
           : error.message,
       );
+      return;
+    }
+
+    // Supabase returns a live session immediately when email confirmation is disabled (e.g. this
+    // project's local stack) — in that case there's nothing to "check email" for, so go straight
+    // in instead of showing a confirmation screen that would never resolve.
+    if (data.session) {
+      router.replace("/dashboard");
+      router.refresh();
       return;
     }
 
@@ -121,13 +162,30 @@ export function SignUpForm() {
         ) : null}
       </div>
 
+      {TURNSTILE_SITE_KEY ? (
+        <>
+          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce={nonce} />
+          <div
+            className="cf-turnstile"
+            data-sitekey={TURNSTILE_SITE_KEY}
+            data-callback="onTurnstileVerify"
+            data-expired-callback="onTurnstileExpire"
+          />
+        </>
+      ) : null}
+
       {formError ? (
         <p role="alert" aria-live="polite" className="text-sm text-danger">
           {formError}
         </p>
       ) : null}
 
-      <Button type="submit" isLoading={isSubmitting} className="w-full">
+      <Button
+        type="submit"
+        isLoading={isSubmitting}
+        disabled={!!TURNSTILE_SITE_KEY && !captchaToken}
+        className="w-full"
+      >
         Create account
       </Button>
 

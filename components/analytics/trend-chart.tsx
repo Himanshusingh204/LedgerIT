@@ -20,7 +20,29 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
   return (
     <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-5">
       <h2 className="text-sm font-medium text-foreground-muted">Spending over time</h2>
-      <div className="mt-3 h-64">
+
+      {/* Screen-reader-only data table — the SVG chart below has no accessible text equivalent. */}
+      <table className="sr-only">
+        <caption>Income and expenses by day</caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Income</th>
+            <th scope="col">Expenses</th>
+          </tr>
+        </thead>
+        <tbody>
+          {trend.map((point) => (
+            <tr key={point.date}>
+              <th scope="row">{formatDateLabel(point.date)}</th>
+              <td>{formatCurrency(point.incomeTotal)}</td>
+              <td>{formatCurrency(point.expenseTotal)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-3 h-64" aria-hidden>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={trend} margin={{ left: 4, right: 12, top: 8 }}>
             <CartesianGrid vertical={false} stroke="var(--border)" />

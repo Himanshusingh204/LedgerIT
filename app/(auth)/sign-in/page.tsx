@@ -3,6 +3,7 @@ import { SignInForm } from "@/components/auth/sign-in-form";
 
 export const metadata: Metadata = {
   title: "Sign in",
+  description: "Sign in to your Clearledger account to access your personal expense tracking dashboard, budgets, and financial analytics.",
 };
 
 export default async function SignInPage({

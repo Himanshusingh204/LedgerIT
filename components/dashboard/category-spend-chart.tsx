@@ -38,9 +38,30 @@ export function CategorySpendChart({
   }
 
   return (
-    <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-5">
-      <h2 className="text-sm font-medium text-foreground-muted">Spending by category</h2>
-      <div className="mt-3" style={{ height: Math.max(160, data.length * 44) }}>
+    <div className="card-surface p-5">
+      <h2 className="label-caps text-foreground-muted">Spending by category</h2>
+
+      {/* Screen-reader-only data table — the chart below is an SVG with no accessible text
+          equivalent for its bar values (the legend only names categories, not amounts). */}
+      <table className="sr-only">
+        <caption>Spending by category</caption>
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((entry) => (
+            <tr key={entry.name}>
+              <th scope="row">{entry.name}</th>
+              <td>{formatCurrency(entry.total)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-3" aria-hidden style={{ height: Math.max(160, data.length * 44) }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ left: 8, right: 24 }}>
             <XAxis type="number" hide />

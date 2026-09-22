@@ -39,23 +39,36 @@ export async function createAccountAction(
       ...parsed.data,
       lastFour: parsed.data.lastFour || undefined,
     });
-  } catch {
+  } catch (error) {
+    console.error("[action:accounts] createAccount failed", {
+      userId: user.id,
+      action: "createAccount",
+      error: error instanceof Error ? error.message : String(error),
+      ts: new Date().toISOString(),
+    });
     return { status: "error", message: "Could not create the account. Please try again." };
   }
 
+  revalidatePath("/dashboard");
   revalidatePath("/settings");
   revalidatePath("/transactions");
-  revalidatePath("/dashboard");
   return { status: "idle" };
 }
 
 export async function archiveAccountAction(id: string): Promise<void> {
-  // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the accounts table), not by an
-  // explicit check here — do not "optimize" this by switching to a service-role client, which
-  // would bypass that check silently.
-  const supabase = await createClient();
-  await archiveAccount(supabase, id);
-  revalidatePath("/settings");
-  revalidatePath("/transactions");
-  revalidatePath("/dashboard");
+  try {
+    const supabase = await createClient();
+    await archiveAccount(supabase, id);
+    revalidatePath("/dashboard");
+    revalidatePath("/settings");
+    revalidatePath("/transactions");
+  } catch (error) {
+    console.error("[action:accounts] archiveAccount failed", {
+      accountId: id,
+      action: "archiveAccount",
+      error: error instanceof Error ? error.message : String(error),
+      ts: new Date().toISOString(),
+    });
+    throw error;
+  }
 }

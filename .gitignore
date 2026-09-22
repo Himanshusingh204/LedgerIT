@@ -38,8 +38,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — .env.example is a committed template, everything else holds real local secrets
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -49,9 +50,17 @@ yarn-error.log*
 next-env.d.ts
 
 # Claude Code tooling (not part of the application)
-/.claude
+/.claude/*
+!/.claude/skills
 /.claudeskills
 
 # original planning-pack archive — fully extracted into docs/ + PROJECT-META.json +
 # public/design-reference/ already; kept on disk for reference, not worth versioning
 /expense-tracker-master-plan.zip
+
+# temporary screenshots & test artifacts
+screenshot-*.png
+nav-*.png
+*.log
+.tempmediaStorage
+
