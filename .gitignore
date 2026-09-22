@@ -64,3 +64,15 @@ nav-*.png
 *.log
 .tempmediaStorage
 
+# AI, local dev notes, and planning documents (kept locally, excluded from repository)
+PLANNING.md
+plan.md
+MASTER-PLAN.md
+HANDOFF.md
+CLAUDE.md
+TASKS.md
+/.claude/
+/scripts/
+docs/04-development-plan.md
+docs/05-ai-build-prompt.md
+

@@ -1,9 +1,6 @@
 # Architecture, File Structure & Data Flow
 
-This is the map: where code lives, why it's organized this way, and how a request actually moves
-through the system. Read `CLAUDE.md` first for build history and status — this file explains the
-*shape* of the codebase itself, so a new session (or a new contributor) can find things without
-grepping blind.
+This document details the architectural layers, module hierarchy, data flow, and invariants of LedgerIT. It explains the shape of the codebase so contributors and maintainers can navigate and extend the system with confidence.
 
 ## 1. Layering, in one picture
 

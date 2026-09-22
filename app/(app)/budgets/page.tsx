@@ -17,7 +17,11 @@ function isValidMonthParam(value: string): boolean {
   return /^\d{4}-\d{2}-01$/.test(value);
 }
 
-export default async function BudgetsPage({ searchParams }: PageProps<"/budgets">) {
+interface BudgetsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
   const params = await searchParams;
   const supabase = await createClient();
   const {

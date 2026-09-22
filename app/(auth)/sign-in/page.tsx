@@ -6,9 +6,13 @@ export const metadata: Metadata = {
   description: "Sign in to your Clearledger account to access your personal expense tracking dashboard, budgets, and financial analytics.",
 };
 
+interface SignInPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
 export default async function SignInPage({
   searchParams,
-}: PageProps<"/sign-in">) {
+}: SignInPageProps) {
   const params = await searchParams;
   const redirectToParam = params.redirectTo;
   const redirectTo = typeof redirectToParam === "string" ? redirectToParam : "/dashboard";

@@ -22,7 +22,11 @@ export const metadata: Metadata = {
 
 const RANGE_KEYS = new Set<RangeKey>(["week", "month", "quarter", "year"]);
 
-export default async function AnalyticsPage({ searchParams }: PageProps<"/analytics">) {
+interface AnalyticsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps) {
   const params = await searchParams;
   const supabase = await createClient();
   const {

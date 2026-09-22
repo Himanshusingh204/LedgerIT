@@ -17,7 +17,11 @@ export const metadata: Metadata = {
 const PAGE_SIZE = 25;
 const TRANSACTION_TYPES = new Set<TransactionType>(["expense", "income", "transfer"]);
 
-export default async function TransactionsPage({ searchParams }: PageProps<"/transactions">) {
+interface TransactionsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function TransactionsPage({ searchParams }: TransactionsPageProps) {
   const params = await searchParams;
   const supabase = await createClient();
   const {

@@ -17,7 +17,11 @@ export const metadata: Metadata = {
 
 const RANGE_KEYS = new Set<RangeKey>(["week", "month", "quarter", "year"]);
 
-export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
+interface DashboardPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const params = await searchParams;
   const supabase = await createClient();
   const {
