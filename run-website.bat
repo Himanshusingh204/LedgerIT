@@ -9,7 +9,7 @@ echo                     LedgerIT - Launch Website
 echo =====================================================================
 echo.
 
-:: 1. Check Node.js
+:: 1. Verify Node.js
 where node >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERROR] Node.js is not found in your PATH.
@@ -19,24 +19,52 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: 2. Target URL
-set "APP_URL=http://localhost:3000"
+:: 2. Port Selection (Default to 3005 to avoid collision with other websites running on 3000)
+set "PORT=3005"
+if not "%~1"=="" (
+    if not "%~1"=="prod" (
+        set "PORT=%~1"
+    )
+)
 
-:: 3. Launch browser after a 3-second delay to allow Turbopack to bind port 3000
-echo [*] Opening browser to %APP_URL% in 3 seconds...
-start "" /b powershell -NoProfile -Command "Start-Sleep -Seconds 3; Start-Process '%APP_URL%'"
+:: 3. Check if chosen port is in use, and auto-increment if occupied
+:CHECK_PORT
+netstat -ano | findstr ":%PORT% " | findstr "LISTENING" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo [!] Port %PORT% is currently occupied by another website/process.
+    set /a PORT+=1
+    echo [*] Checking next available port: !PORT!...
+    goto :CHECK_PORT
+)
 
-:: 4. Start Next.js Development Server
-echo [*] Starting Next.js development server with Turbopack...
-echo [*] Press Ctrl+C in this window anytime to stop the server.
+:: 4. Set Environment Variables for this session
+set "PORT=!PORT!"
+set "NEXT_PUBLIC_APP_URL=http://localhost:!PORT!"
+set "APP_URL=http://localhost:!PORT!"
+
 echo.
+echo [*] Dedicated Port : !PORT! (Isolated from other websites)
+echo [*] Web Address    : !APP_URL!
+echo [*] Opening browser to !APP_URL! in 3 seconds...
+echo.
+
+:: 5. Launch browser after 3-second delay
+start "" /b powershell -NoProfile -Command "Start-Sleep -Seconds 3; Start-Process '!APP_URL!'"
+
+:: 6. Launch Server
+echo [*] Starting Next.js server with Turbopack on port !PORT!...
+echo [*] Press Ctrl+C in this terminal anytime to stop the server.
 echo ---------------------------------------------------------------------
+echo.
 
 if "%1"=="prod" (
-    echo [*] Running Production Mode (build + start)...
-    call npm run build && call npm start
+    echo [*] Running Production Mode (build + start on port !PORT!)...
+    call npm run build && call npm start -- -p !PORT!
+) else if "%2"=="prod" (
+    echo [*] Running Production Mode (build + start on port !PORT!)...
+    call npm run build && call npm start -- -p !PORT!
 ) else (
-    call npm run dev
+    call npm run dev -- -p !PORT!
 )
 
 exit /b %errorlevel%
