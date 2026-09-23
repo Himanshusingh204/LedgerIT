@@ -54,7 +54,7 @@ if %errorlevel% neq 0 (
 echo [PASS] ESLint check completed with 0 errors.
 echo.
 
-echo [3/4] Running Vitest Unit & Integration Tests (npm test)...
+echo [3/4] Running Vitest Unit and Integration Tests (npm test)...
 call npm test
 if %errorlevel% neq 0 (
     echo.

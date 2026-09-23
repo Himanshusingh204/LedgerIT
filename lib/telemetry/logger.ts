@@ -65,10 +65,10 @@ class TelemetryLogger {
     } else {
       // Readable terminal format in development
       const prefix = `[${payload.timestamp}] [${level.toUpperCase()}] [${event}]`;
-      if (err) {
-        console.error(prefix, context || "", err);
+      if (level === "error") {
+        console.error(prefix, context || "", err || "");
       } else if (level === "warn") {
-        console.warn(prefix, context || "");
+        console.warn(prefix, context || "", err || "");
       } else {
         console.log(prefix, context || "");
       }
