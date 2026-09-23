@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, Moon, Sun, Wallet, X } from "lucide-react";
 
@@ -12,22 +12,33 @@ const NAV_LINKS = [
   { href: "#pricing", label: "Pricing" },
 ];
 
+const emptySubscribe = () => () => {};
+function useIsMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
+
 export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsMounted();
 
   useEffect(() => {
-    setMounted(true);
     const savedTheme = localStorage.getItem("cl_theme") as "light" | "dark" | "system" | null;
     if (savedTheme) {
-      setTheme(savedTheme);
-      if (savedTheme === "system") {
-        document.documentElement.removeAttribute("data-theme");
-      } else {
-        document.documentElement.setAttribute("data-theme", savedTheme);
-      }
+      // Schedule theme update asynchronously to avoid cascading renders
+      queueMicrotask(() => {
+        setTheme(savedTheme);
+        if (savedTheme === "system") {
+          document.documentElement.removeAttribute("data-theme");
+        } else {
+          document.documentElement.setAttribute("data-theme", savedTheme);
+        }
+      });
     }
 
     function onScroll() {

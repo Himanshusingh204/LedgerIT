@@ -63,7 +63,7 @@ function TestimonialCard({
       <div className="relative">
         {/* Quote mark */}
         <span className="text-3xl font-serif leading-none text-foreground-muted/40" aria-hidden="true">
-          "
+          &ldquo;
         </span>
         <blockquote className="mt-1 text-sm leading-relaxed text-foreground">
           {quote}

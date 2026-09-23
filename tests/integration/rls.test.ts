@@ -7,7 +7,19 @@ import type { Database } from "@/types/database";
 // than failing — see CLAUDE.md §9 for how to start the local stack for running these.
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-const hasLiveSupabase = Boolean(supabaseUrl && supabaseKey);
+
+// Probe whether live local Supabase stack is running and responsive.
+let hasLiveSupabase = false;
+if (supabaseUrl && supabaseKey && !supabaseUrl.includes("placeholder")) {
+  try {
+    const res = await fetch(`${supabaseUrl}/auth/v1/health`, {
+      signal: AbortSignal.timeout(800),
+    });
+    hasLiveSupabase = res.ok;
+  } catch {
+    hasLiveSupabase = false;
+  }
+}
 
 async function signUpTestUser() {
   // persistSession/autoRefreshToken off: multiple client instances in this same test file would

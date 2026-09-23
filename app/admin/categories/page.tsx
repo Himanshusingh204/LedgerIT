@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Tags, ShieldAlert, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ShieldAlert, ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listAdminSystemCategories } from "@/lib/data/admin";
 import { CategoryIcon } from "@/components/shared/category-icon";

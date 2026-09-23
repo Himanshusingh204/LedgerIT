@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Users, Shield, User as UserIcon, Calendar, Clock, Globe } from "lucide-react";
+import { Shield, User as UserIcon, Calendar, Clock, Globe } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listAdminUsers } from "@/lib/data/admin";
 import { AdminPageTransition } from "@/components/admin/admin-page-transition";

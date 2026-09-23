@@ -99,7 +99,10 @@ lib/
   supabase/                   client.ts (browser client), server.ts (Server Component/Action
                               client, cookie-aware), middleware.ts (used by proxy.ts — session
                               refresh, CSP nonce, route gating; see §4).
-  formatters/                  currency.ts — display formatting, kept out of finance/ because it's
+  errors/                     codes.ts — centralized ErrorCode enum, safe error messages, and ActionResponse envelope.
+  telemetry/                  logger.ts — structured JSON logger, request IDs, and security audit log emitter.
+  security/                   limiter.ts — sliding-window rate limiter with automatic garbage collection.
+  formatters/                 currency.ts — display formatting, kept out of finance/ because it's
                               presentation, not calculation (a formatted string is never fed back
                               into a calculation).
   utils.ts                    `cn()` (clsx + tailwind-merge) — the one truly generic helper.
@@ -122,16 +125,16 @@ public/images/               Self-hosted photos only — see docs/image-sources.
                               here must have an entry.
 
 e2e/, tests/unit/, tests/integration/
-                              Playwright end-to-end, Vitest unit (mirrors lib/finance/), and an
-                              intentionally-empty placeholder for future integration tests.
+                              Playwright end-to-end, Vitest unit (mirrors lib/finance/), and
+                              Vitest integration (RLS live tests with connection reachability guard).
 
 .claude/skills/run-clearledger/
                               The agent-facing "how to run and drive this app" skill — see its
                               own SKILL.md. Not application code.
 
-docs/01–05*.md, MASTER-PLAN.md, TASKS.md, HANDOFF.md, CLAUDE.md, ARCHITECTURE.md (this file)
-                              Planning/reference docs. CLAUDE.md is the entry point; it tells you
-                              which of the others to read and when.
+SECURITY.md, DATA-FLOW.md, DEPLOYMENT.md, MONITORING.md, ARCHITECTURE.md (this file)
+                              Enterprise engineering specifications for cybersecurity, data flow,
+                              load balancing, observability, and infrastructure.
 ```
 
 **Two dead directories were removed while writing this doc**: `app/(marketing)/components/` (empty

@@ -6,8 +6,6 @@ import {
   Lock,
   HardDrive,
   Cpu,
-  FileText,
-  Clock,
   Terminal,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -149,7 +147,7 @@ export default async function AdminSystemPage() {
         </p>
 
         <div className="mt-4 overflow-x-auto rounded-xl border border-border/80 bg-background/80 p-4 font-mono text-[11px] text-foreground-muted">
-          <div className="text-emerald-400">// Example Structured Log Format emitted on failure:</div>
+          <div className="text-emerald-400">{"// Example Structured Log Format emitted on failure:"}</div>
           <div>&#123;</div>
           <div className="pl-4"><span className="text-primary">&quot;tag&quot;</span>: <span className="text-amber-300">&quot;[action:transactions]&quot;</span>,</div>
           <div className="pl-4"><span className="text-primary">&quot;userId&quot;</span>: <span className="text-blue-300">&quot;uuid-of-user&quot;</span>,</div>

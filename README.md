@@ -208,18 +208,31 @@ Lighthouse desktop audit results on production build:
 
 ---
 
-## 🚢 Deployment to Vercel
+## 🚢 Deployment & Git Workflow
 
-1. Push your repository to GitHub.
-2. Import the project into your [Vercel Dashboard](https://vercel.com).
-3. Set the Environment Variables:
-   * `NEXT_PUBLIC_SUPABASE_URL`
-   * `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-   * `NEXT_PUBLIC_APP_URL` (set to your Vercel URL, e.g. `https://your-domain.vercel.app`)
-   * `SUPABASE_SERVICE_ROLE_KEY`
-4. In your Supabase Dashboard under **Authentication → URL Configuration**, add your production domain to the redirect whitelist:
-   * `https://<your-domain>.vercel.app/**`
-5. Click **Deploy**.
+LedgerIT follows a strict development branch workflow:
+* **`dev` branch**: Active development branch where new features, architectural hardening, and security enhancements land.
+* **`main` branch**: Production release branch wired to live deployment environments.
+
+### Push to Dev Branch:
+```bash
+git checkout dev
+git add .
+git commit -m "feat: your feature"
+git push origin dev
+```
+
+---
+
+## 📚 Engineering Documentation Suite
+
+| Document | Focus Area |
+|---|---|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | High-level topology, module hierarchy, stateless compute, and connection pooling |
+| [SECURITY.md](SECURITY.md) | Threat modeling, dynamic CSP nonces, RLS policies, rate limiting, and security audit trail |
+| [DATA-FLOW.md](DATA-FLOW.md) | End-to-end mutation lifecycle, dual-tier validation, and zero-float-drift financial math |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Layer 7 load balancing (Nginx), PgBouncer connection pooling, and multi-container scaling |
+| [MONITORING.md](MONITORING.md) | Health check probe (`/api/health`), structured telemetry, error taxonomy, and rapid bug fixing |
 
 ---
 
