@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 import type { ButtonHTMLAttributes } from "react";
 
 const variantClasses = {
-  primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-semibold",
-  ghost: "text-foreground-muted hover:bg-surface-muted hover:text-foreground",
-  outline: "border border-border bg-surface text-foreground hover:bg-surface-muted",
+  primary: "bg-primary hover:bg-primary-light text-primary-foreground shadow-sm font-semibold active:scale-[0.98]",
+  ghost: "text-foreground-muted hover:bg-surface-muted hover:text-foreground active:scale-[0.98]",
+  outline: "border border-border bg-surface text-foreground hover:bg-surface-muted active:scale-[0.98]",
 } as const;
 
 const sizeClasses = {
@@ -31,7 +31,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] text-sm font-medium transition-opacity disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] text-sm font-medium transition-[transform,background-color,opacity] duration-200 disabled:pointer-events-none disabled:opacity-60",
         variantClasses[variant],
         sizeClasses[size],
         className,

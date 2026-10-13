@@ -2,28 +2,28 @@
 
 :root {
   /* ── Base surfaces ───────────────────────────────────────────────── */
-  --background: #f7f9fc;
+  --background: #f8f7f4;
   --surface: #ffffff;
-  --surface-muted: #eef2f8;
-  --foreground: #0f172a;
-  --foreground-muted: #334155; /* WCAG AAA high contrast (7.5:1 on white/light) */
-  --border: #e2e8f0;
+  --surface-muted: #f0ede6;
+  --foreground: #1a2e22;
+  --foreground-muted: #4a5d4f;
+  --border: #ddd8cc;
 
-  /* ── Brand ───────────────────────────────────────────────────────── */
-  --primary: #1d4ed8;
+  /* ── Brand: Deep Evergreen (trust, growth, money) ───────────────── */
+  --primary: #1a5c3f;
   --primary-foreground: #ffffff;
-  --primary-light: #3b82f6;
-  --primary-subtle: #eff6ff;
+  --primary-light: #2d7a56;
+  --primary-subtle: #e8f2ec;
 
   /* ── Semantic ────────────────────────────────────────────────────── */
-  --success: #16824c;
+  --success: #1a7a4a;
   --warning: #b4650a;
   --danger: #c62f3f;
 
   /* ── Charts ──────────────────────────────────────────────────────── */
-  --chart-1: #1d4ed8;
-  --chart-2: #16b3a8;
-  --chart-3: #e28c2c;
+  --chart-1: #1a5c3f;
+  --chart-2: #2d7a56;
+  --chart-3: #c9a227;
 
   /* ── Radii ───────────────────────────────────────────────────────── */
   --radius-control: 0.5rem;
@@ -31,22 +31,21 @@
   --radius-surface-lg: 1.125rem;
 
   /* ── Shadows ─────────────────────────────────────────────────────── */
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 8px rgba(15, 23, 42, 0.04);
-  --shadow-card-hover: 0 8px 32px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.06);
-  --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.22);
-  --shadow-glow-sm: 0 0 16px rgba(48, 43, 99, 0.14);
+  --shadow-card: 0 1px 2px rgba(26, 46, 34, 0.05), 0 1px 8px rgba(26, 46, 34, 0.04);
+  --shadow-card-hover: 0 8px 32px rgba(26, 46, 34, 0.10), 0 2px 8px rgba(26, 46, 34, 0.05);
+  --shadow-glow: 0 0 40px rgba(26, 92, 63, 0.18);
+  --shadow-glow-sm: 0 0 16px rgba(26, 92, 63, 0.12);
 
-  /* ── Premium Midnight Gradient Tokens (#24243e, #302b63, #0f0c29) ── */
-  --gradient-midnight: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-  --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #302b63 100%);
-  --gradient-cta: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
-  --gradient-success: linear-gradient(135deg, #16824c 0%, #10b981 100%);
+  /* ── Gradients ───────────────────────────────────────────────────── */
+  --gradient-primary: linear-gradient(135deg, #1a5c3f 0%, #2d7a56 100%);
+  --gradient-cta: linear-gradient(135deg, #1a5c3f 0%, #1a4d3a 100%);
+  --gradient-success: linear-gradient(135deg, #1a7a4a 0%, #2d9a62 100%);
 
   /* Gradient mesh — layered radial gradients for the hero background */
-  --gradient-mesh-1: radial-gradient(ellipse at 20% 10%, rgba(48, 43, 99, 0.22) 0%, transparent 55%);
-  --gradient-mesh-2: radial-gradient(ellipse at 85% 5%,  rgba(36, 36, 62, 0.18) 0%, transparent 50%);
-  --gradient-mesh-3: radial-gradient(ellipse at 60% 80%, rgba(29, 78, 216, 0.12) 0%, transparent 45%);
-  --gradient-mesh-4: radial-gradient(ellipse at 0%  60%, rgba(15, 12, 41, 0.16) 0%, transparent 45%);
+  --gradient-mesh-1: radial-gradient(ellipse at 20% 10%, rgba(26, 92, 63, 0.10) 0%, transparent 55%);
+  --gradient-mesh-2: radial-gradient(ellipse at 85% 5%,  rgba(201, 162, 39, 0.06) 0%, transparent 50%);
+  --gradient-mesh-3: radial-gradient(ellipse at 60% 80%, rgba(45, 122, 86, 0.08) 0%, transparent 45%);
+  --gradient-mesh-4: radial-gradient(ellipse at 0%  60%, rgba(26, 77, 58, 0.08) 0%, transparent 45%);
 
   /* ── Glassmorphism ───────────────────────────────────────────────── */
   --glass-bg: rgba(255, 255, 255, 0.75);
@@ -60,54 +59,54 @@
 /* ── Dark mode token overrides (Midnight Obsidian Palette) ────────── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --background: #0f0c29;
-    --surface: #17153a;
-    --surface-muted: #24243e;
-    --foreground: #f8fafc;
-    --foreground-muted: #94a3b8; /* WCAG AAA contrast on dark */
-    --border: #2e2a58;
+    --background: #0d1a13;
+    --surface: #16281e;
+    --surface-muted: #1e3529;
+    --foreground: #f0f5f2;
+    --foreground-muted: #8fa898;
+    --border: #2a4435;
 
-    --primary: #60a5fa;
-    --primary-light: #93c5fd;
-    --primary-subtle: #24243e;
+    --primary: #4ec98a;
+    --primary-light: #6edba6;
+    --primary-subtle: #1e3529;
 
-    --success: #3fb27a;
-    --warning: #d4810f;
+    --success: #4ec98a;
+    --warning: #d4a03c;
     --danger: #e05260;
 
     --shadow-card: 0 1px 2px rgba(0,0,0, 0.4), 0 1px 8px rgba(0,0,0, 0.3);
     --shadow-card-hover: 0 8px 32px rgba(0,0,0, 0.55), 0 2px 8px rgba(0,0,0, 0.35);
-    --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.45);
+    --shadow-glow: 0 0 40px rgba(78, 201, 138, 0.15);
 
-    --glass-bg: rgba(23, 21, 58, 0.85);
+    --glass-bg: rgba(22, 40, 30, 0.85);
     --glass-border: rgba(255, 255, 255, 0.10);
-    --glass-header-bg: rgba(15, 12, 41, 0.92);
+    --glass-header-bg: rgba(13, 26, 19, 0.92);
   }
 }
 
 :root[data-theme="dark"], .dark {
-  --background: #0f0c29;
-  --surface: #17153a;
-  --surface-muted: #24243e;
-  --foreground: #f8fafc;
-  --foreground-muted: #94a3b8;
-  --border: #2e2a58;
+  --background: #0d1a13;
+  --surface: #16281e;
+  --surface-muted: #1e3529;
+  --foreground: #f0f5f2;
+  --foreground-muted: #8fa898;
+  --border: #2a4435;
 
-  --primary: #60a5fa;
-  --primary-light: #93c5fd;
-  --primary-subtle: #24243e;
+  --primary: #4ec98a;
+  --primary-light: #6edba6;
+  --primary-subtle: #1e3529;
 
-  --success: #3fb27a;
-  --warning: #d4810f;
+  --success: #4ec98a;
+  --warning: #d4a03c;
   --danger: #e05260;
 
   --shadow-card: 0 1px 2px rgba(0,0,0, 0.4), 0 1px 8px rgba(0,0,0, 0.3);
   --shadow-card-hover: 0 8px 32px rgba(0,0,0, 0.55), 0 2px 8px rgba(0,0,0, 0.35);
-  --shadow-glow: 0 0 40px rgba(48, 43, 99, 0.45);
+  --shadow-glow: 0 0 40px rgba(78, 201, 138, 0.15);
 
-  --glass-bg: rgba(23, 21, 58, 0.85);
+  --glass-bg: rgba(22, 40, 30, 0.85);
   --glass-border: rgba(255, 255, 255, 0.10);
-  --glass-header-bg: rgba(15, 12, 41, 0.92);
+  --glass-header-bg: rgba(13, 26, 19, 0.92);
 }
 
 @theme inline {
@@ -196,9 +195,9 @@ body {
 .gradient-mesh {
   background-color: var(--background);
   background-image:
-    radial-gradient(ellipse at 25% 15%, rgba(48, 43, 99, 0.28) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 5%,  rgba(36, 36, 62, 0.24) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 80%, rgba(29, 78, 216, 0.16) 0%, transparent 45%);
+    radial-gradient(ellipse at 25% 15%, rgba(26, 92, 63, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 5%,  rgba(201, 162, 39, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(45, 122, 86, 0.10) 0%, transparent 45%);
 }
 
 /* ── Marquee animation ──────────────────────────────────────────────── */
@@ -280,20 +279,20 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 14px rgba(48, 43, 99, 0.4), 0 0 28px rgba(36, 36, 62, 0.25);
+    box-shadow: 0 0 14px rgba(26, 92, 63, 0.25), 0 0 28px rgba(45, 122, 86, 0.15);
   }
   50% {
-    box-shadow: 0 0 22px rgba(29, 78, 216, 0.45), 0 0 36px rgba(48, 43, 99, 0.35);
+    box-shadow: 0 0 22px rgba(26, 92, 63, 0.35), 0 0 36px rgba(201, 162, 39, 0.15);
   }
 }
 
 .btn-color-changing {
   background: linear-gradient(
     135deg,
-    #1d4ed8 0%,
-    #302b63 35%,
-    #24243e 65%,
-    #1d4ed8 100%
+    #1a5c3f 0%,
+    #2d7a56 35%,
+    #1a4d3a 65%,
+    #1a5c3f 100%
   );
   background-size: 300% 300%;
   animation: gradient-flow 6s ease infinite, pulse-glow 3.5s ease-in-out infinite;
@@ -304,7 +303,7 @@ body {
 
 .btn-color-changing:hover {
   transform: translateY(-1.5px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(48, 43, 99, 0.6);
+  box-shadow: 0 8px 30px rgba(26, 92, 63, 0.4);
 }
 
 .btn-color-changing:active {

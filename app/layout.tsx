@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
+import { ServiceWorkerRegistrar } from "@/components/shared/service-worker-registrar";
 
 // Typography matches the Ledger-style financial-dashboard mockup: Hanken Grotesk for headings/body,
 // JetBrains Mono for all numeric/currency figures (tabular ledger look).
@@ -119,6 +120,7 @@ export default async function RootLayout({
     <html lang="en" className={`${hankenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/20 selection:text-primary">
         {children}
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );

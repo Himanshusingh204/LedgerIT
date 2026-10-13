@@ -52,6 +52,15 @@ export type Transaction = {
   updated_at: string;
 }
 
+export type ShortLink = {
+  id: string;
+  code: string;
+  original_url: string;
+  user_id: string | null;
+  hit_count: number;
+  created_at: string;
+}
+
 export type Budget = {
   id: string;
   user_id: string;
@@ -154,12 +163,22 @@ export type Database = {
         Update: Partial<AdminAuditLog>;
         Relationships: [];
       };
+      short_links: {
+        Row: ShortLink;
+        Insert: Partial<ShortLink> & { code: string; original_url: string };
+        Update: Partial<ShortLink>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
       is_admin: {
         Args: { check_user_id: string };
         Returns: boolean;
+      };
+      increment_short_link_hits: {
+        Args: { p_code: string };
+        Returns: void;
       };
       get_admin_stats: {
         Args: Record<string, never>;

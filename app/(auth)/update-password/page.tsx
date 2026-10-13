@@ -7,10 +7,10 @@ export const metadata: Metadata = {
 
 export default function UpdatePasswordPage() {
   return (
-    <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-6 sm:p-8">
-      <h1 className="text-xl font-semibold text-foreground">Set a new password</h1>
-      <p className="mt-1 text-sm text-foreground-muted">Choose a new password for your account.</p>
-      <div className="mt-6">
+    <div>
+      <h1 className="text-2xl font-bold tracking-tight text-foreground">Set a new password</h1>
+      <p className="mt-2 text-sm text-foreground-muted">Choose a new password for your account.</p>
+      <div className="mt-8">
         <UpdatePasswordForm />
       </div>
     </div>

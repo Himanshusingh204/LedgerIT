@@ -230,11 +230,12 @@ export function Hero() {
               <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />
               Budget on track
             </motion.div>
-            {/* Dashboard card */}
+            {/* Dashboard card with subtle 3D depth */}
             <div
-              className="rounded-[var(--radius-surface-lg)] p-3"
+              className="rounded-[var(--radius-surface-lg)] p-3 shadow-2xl"
               style={{
                 background: "linear-gradient(135deg, #24243e 0%, #302b63 50%, #1d4ed8 100%)",
+                transform: "perspective(1200px) rotateY(-8deg) rotateX(4deg) translateZ(0)",
               }}
             >
               <DashboardMockup />

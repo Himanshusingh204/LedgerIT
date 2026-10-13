@@ -1,0 +1,24 @@
+# Clearledger
+
+> Clearledger is a private, honest personal finance and expense tracker. No bank linking, no AI
+> gimmicks, no paywalls for core features. Track spending, budgets, accounts, and analytics.
+
+## Product
+
+- [Home](https://clearledger.example/)
+- [Sign up](https://clearledger.example/sign-up)
+- [Sign in](https://clearledger.example/sign-in)
+
+## Legal
+
+- [Privacy](https://clearledger.example/privacy)
+- [Terms](https://clearledger.example/terms)
+- [Cookies](https://clearledger.example/cookies)
+
+## Technical
+
+- Built with Next.js 16, TypeScript, Tailwind CSS v4, Supabase (Auth + Postgres RLS), Recharts, motion.
+- Data access layer in `lib/data/*`, server actions in `lib/actions/*`, finance logic in `lib/finance/*`.
+- Health endpoint: /api/health
+- Sitemap: /sitemap.xml
+- Robots: /robots.txt
