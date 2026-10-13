@@ -17,16 +17,18 @@ function amountTone(type: Transaction["type"]) {
   return "text-foreground";
 }
 
-function signedAmount(transaction: Transaction) {
+function signedAmount(transaction: Transaction, currency: string) {
   const magnitude = transaction.type === "expense" ? -transaction.amount : transaction.amount;
-  return formatSignedCurrency(magnitude, transaction.currency);
+  return formatSignedCurrency(magnitude, currency);
 }
 
 export function TransactionList({
   transactions,
   accounts,
   categories,
+  currency,
 }: {
+  currency: string;
   transactions: Transaction[];
   accounts: Account[];
   categories: Category[];
@@ -49,7 +51,7 @@ export function TransactionList({
 
   async function handleViewReceipt(path: string) {
     try {
-      // Generated fresh here, client-side — never stored or reused, per docs/02 §7.
+      // Generated fresh here, client-side, never stored or reused, per docs/02 §7.
       const url = await getReceiptSignedUrl(createClient(), path);
       window.open(url, "_blank", "noopener,noreferrer");
     } catch {
@@ -95,7 +97,7 @@ export function TransactionList({
                       <span className="grid h-10 w-10 flex-none place-items-center rounded-lg bg-surface-muted text-foreground">
                         <CategoryIcon icon={category?.icon ?? "circle"} className="h-[18px] w-[18px]" />
                       </span>
-                      <span className="font-medium text-foreground">{transaction.merchant || "—"}</span>
+                      <span className="font-medium text-foreground">{transaction.merchant || ", "}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
@@ -115,10 +117,10 @@ export function TransactionList({
                     })}
                   </td>
                   <td className="px-4 py-3 text-foreground-muted">
-                    {accountsById.get(transaction.account_id)?.name ?? "—"}
+                    {accountsById.get(transaction.account_id)?.name ?? ", "}
                   </td>
                   <td className={`text-num px-4 py-3 text-right font-semibold ${amountTone(transaction.type)}`}>
-                    {signedAmount(transaction)}
+                    {signedAmount(transaction, currency)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-1">
@@ -169,19 +171,19 @@ export function TransactionList({
                     <CategoryIcon icon={category?.icon ?? "circle"} className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="font-medium text-foreground">{transaction.merchant || "—"}</p>
+                    <p className="font-medium text-foreground">{transaction.merchant || ", "}</p>
                     <p className="text-num mt-0.5 text-xs text-foreground-muted">
                       {new Date(transaction.occurred_at).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
                       })}{" "}
-                      · {category?.name ?? "Uncategorized"} · {accountsById.get(transaction.account_id)?.name ?? "—"}
+                      · {category?.name ?? "Uncategorized"} · {accountsById.get(transaction.account_id)?.name ?? ", "}
                     </p>
                   </div>
                 </div>
                 <span className={`text-num font-semibold ${amountTone(transaction.type)}`}>
-                  {signedAmount(transaction)}
+                  {signedAmount(transaction, currency)}
                 </span>
               </div>
               <div className="mt-3 flex justify-end gap-1">

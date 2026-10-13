@@ -42,9 +42,11 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
   let budgetByCategoryId = new Map<string, { id: string; amount: number }>();
   let spentByCategoryId = new Map<string, number>();
   let isTruncated = false;
+  let currency = "USD";
 
   try {
     const profile = await getProfile(supabase, user.id);
+    currency = profile.currency;
     const monthParam = typeof params.month === "string" ? params.month : "";
     monthStart = isValidMonthParam(monthParam) ? monthParam : monthStartISO(new Date(), profile.timezone);
 
@@ -87,7 +89,7 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
 
       {isTruncated ? (
         <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
-          This month has more transactions than can be shown at once — spent amounts below reflect
+          This month has more transactions than can be shown at once, spent amounts below reflect
           only part of it.
         </p>
       ) : null}
@@ -100,7 +102,7 @@ export default async function BudgetsPage({ searchParams }: BudgetsPageProps) {
             const budget = budgetByCategoryId.get(category.id);
             const spent = spentByCategoryId.get(category.id) ?? 0;
             return (
-              <BudgetRow
+              <BudgetRow currency={currency}
                 key={category.id}
                 category={category}
                 monthStart={monthStart}

@@ -46,5 +46,5 @@ export async function submitFeedbackAction(
     return { status: "error", message: "Could not send your feedback. Please try again." };
   }
 
-  return { status: "success", message: "Thanks — we read every message." };
+  return { status: "success", message: "Thanks, we read every message." };
 }

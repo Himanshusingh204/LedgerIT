@@ -8,7 +8,8 @@ function formatDateLabel(date: string): string {
   return new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 }
 
-export function TrendChart({ trend }: { trend: TrendPoint[] }) {
+export function TrendChart({ trend, currency }: {
+  currency: string; trend: TrendPoint[] }) {
   if (trend.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center rounded-[var(--radius-surface)] border border-dashed border-border text-sm text-foreground-muted">
@@ -21,7 +22,7 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
     <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-5">
       <h2 className="text-sm font-medium text-foreground-muted">Spending over time</h2>
 
-      {/* Screen-reader-only data table — the SVG chart below has no accessible text equivalent. */}
+      {/* Screen-reader-only data table, the SVG chart below has no accessible text equivalent. */}
       <table className="sr-only">
         <caption>Income and expenses by day</caption>
         <thead>
@@ -35,8 +36,8 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
           {trend.map((point) => (
             <tr key={point.date}>
               <th scope="row">{formatDateLabel(point.date)}</th>
-              <td>{formatCurrency(point.incomeTotal)}</td>
-              <td>{formatCurrency(point.expenseTotal)}</td>
+              <td>{formatCurrency(point.incomeTotal, currency)}</td>
+              <td>{formatCurrency(point.expenseTotal, currency)}</td>
             </tr>
           ))}
         </tbody>
@@ -55,7 +56,7 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
               minTickGap={24}
             />
             <YAxis
-              tickFormatter={(value) => formatCurrency(Number(value))}
+              tickFormatter={(value) => formatCurrency(Number(value), currency)}
               tick={{ fill: "var(--foreground-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={false}
@@ -63,7 +64,7 @@ export function TrendChart({ trend }: { trend: TrendPoint[] }) {
             />
             <Tooltip
               labelFormatter={(label) => formatDateLabel(String(label))}
-              formatter={(value) => formatCurrency(Number(value))}
+              formatter={(value) => formatCurrency(Number(value), currency)}
               contentStyle={{
                 borderRadius: "var(--radius-control)",
                 border: "1px solid var(--border)",

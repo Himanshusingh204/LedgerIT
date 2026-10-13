@@ -1,4 +1,4 @@
-# 05 — Master Build Prompt for a Coding AI
+# 05, Master Build Prompt for a Coding AI
 
 You are the senior full-stack engineer, system designer, UI engineer, QA engineer, and code reviewer for this repository.
 
@@ -74,12 +74,12 @@ For external imagery:
 
 ## Build order
 
-### Step 1 — Inspect
+### Step 1, Inspect
 Inspect the repository, installed packages, existing files, and environment template.
 
 Do not overwrite an existing working feature without understanding it.
 
-### Step 2 — Foundation
+### Step 2, Foundation
 Set up:
 - route groups
 - layout
@@ -90,7 +90,7 @@ Set up:
 - validation utilities
 - error boundaries
 
-### Step 3 — Database
+### Step 3, Database
 Create migrations for:
 - profiles
 - accounts
@@ -102,7 +102,7 @@ Add constraints and indexes.
 
 Enable and test RLS.
 
-### Step 4 — Authentication
+### Step 4, Authentication
 Implement:
 - sign up
 - sign in
@@ -110,7 +110,7 @@ Implement:
 - protected routes
 - profile bootstrap
 
-### Step 5 — Finance domain
+### Step 5, Finance domain
 Implement and test:
 - transaction validation
 - net change
@@ -121,12 +121,12 @@ Implement and test:
 
 Keep these functions framework-agnostic when practical.
 
-### Step 6 — Transactions
+### Step 6, Transactions
 Build the transaction ledger and transaction form.
 
 Make the add-expense flow fast and excellent on mobile.
 
-### Step 7 — Dashboard
+### Step 7, Dashboard
 Build the dashboard using real database queries.
 
 Desktop hierarchy should roughly follow:
@@ -135,12 +135,12 @@ Sidebar → header/filter → summary → trends/breakdown → transactions/budg
 
 Mobile should become a natural vertical information flow.
 
-### Step 8 — Budgets and analytics
+### Step 8, Budgets and analytics
 Build budget progress and analytical charts.
 
 Make chart content understandable without requiring the user to hover.
 
-### Step 9 — Home page
+### Step 9, Home page
 Build:
 - hero
 - product carousel
@@ -151,7 +151,7 @@ Build:
 
 The carousel should showcase real product UI screens.
 
-### Step 10 — Polish
+### Step 10, Polish
 Check:
 - mobile 320–430px
 - tablet

@@ -12,7 +12,8 @@ const ACCOUNT_TYPE_LABELS: Record<Account["type"], string> = {
   other: "Other",
 };
 
-export function AccountsSummary({ accounts }: { accounts: AccountWithBalance[] }) {
+export function AccountsSummary({ accounts, currency }: {
+  currency: string; accounts: AccountWithBalance[] }) {
   return (
     <div className="card-surface p-5">
       <h2 className="label-caps text-foreground-muted">Accounts</h2>
@@ -37,7 +38,7 @@ export function AccountsSummary({ accounts }: { accounts: AccountWithBalance[] }
                 <p className="label-caps text-foreground-muted">{ACCOUNT_TYPE_LABELS[account.type]}</p>
               </div>
               <span className="text-num text-sm font-medium text-foreground">
-                {formatCurrency(account.balance, account.currency)}
+                {formatCurrency(account.balance, currency)}
               </span>
             </li>
           ))}

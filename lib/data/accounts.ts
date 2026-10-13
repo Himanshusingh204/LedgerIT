@@ -21,7 +21,7 @@ export interface AccountWithBalance extends Account {
 
 /**
  * A balance has to reflect the account's full transaction history, not just whatever date range
- * the dashboard happens to be showing — so this pulls every transaction ever posted to the user's
+ * the dashboard happens to be showing, so this pulls every transaction ever posted to the user's
  * accounts (not just the current period), which the dashboard's other queries don't need to do.
  *
  * Deliberately NOT capped with a row limit the way `listTransactionsInRange` is (see

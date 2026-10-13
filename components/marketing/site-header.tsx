@@ -6,10 +6,10 @@ import { AnimatePresence, motion } from "motion/react";
 import { Menu, Moon, Sun, Wallet, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "#why", label: "Why Clearledger" },
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#features", label: "Features" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/features", label: "Features" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/security", label: "Security" },
 ];
 
 const emptySubscribe = () => () => {};
@@ -76,7 +76,7 @@ export function SiteHeader() {
           onClick={() => setIsMenuOpen(false)}
         >
           <span
-            className="grid h-9 w-9 place-items-center rounded-[var(--radius-control)] text-white shadow-sm"
+            className="grid h-9 w-9 place-items-center rounded-[var(--radius-control)] text-primary-foreground shadow-sm"
             style={{ background: "var(--gradient-primary)" }}
           >
             <Wallet className="h-5 w-5" aria-hidden="true" />
@@ -129,7 +129,7 @@ export function SiteHeader() {
           <Link
             href="/sign-up"
             id="header-signup"
-            className="btn-color-changing relative inline-flex items-center justify-center rounded-[var(--radius-control)] px-4 py-2 text-sm font-semibold tracking-wide text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+            className="btn-color-changing relative inline-flex items-center justify-center rounded-[var(--radius-control)] px-4 py-2 text-sm font-semibold tracking-wide text-primary-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
             Start free
           </Link>

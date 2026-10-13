@@ -1,27 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
 import { ServiceWorkerRegistrar } from "@/components/shared/service-worker-registrar";
 
-// Typography matches the Ledger-style financial-dashboard mockup: Hanken Grotesk for headings/body,
-// JetBrains Mono for all numeric/currency figures (tabular ledger look).
-const hankenGrotesk = Hanken_Grotesk({
-  variable: "--font-hanken-grotesk",
+// Geist for display and UI; Geist Mono for every currency figure (tabular).
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f9fc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0f17" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f5f7" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0d12" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -31,7 +30,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "Clearledger — Simple, Honest Expense Tracking & Budgeting",
+    default: "Clearledger: expense tracking and budgeting",
     template: "%s | Clearledger",
   },
   description:
@@ -61,7 +60,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Clearledger — Simple, Honest Expense Tracking & Budgeting",
+    title: "Clearledger: expense tracking and budgeting",
     description:
       "Track everyday expenses, understand your spending habits, and make financial decisions with confidence.",
     url: "/",
@@ -79,7 +78,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Clearledger — Simple, Honest Expense Tracking & Budgeting",
+    title: "Clearledger: expense tracking and budgeting",
     description:
       "Track everyday expenses, understand your spending habits, and make financial decisions with confidence.",
     creator: "@clearledger",
@@ -111,13 +110,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Reading the nonce here is what makes Next.js's CSP nonce pattern actually work — see
+  // Reading the nonce here is what makes Next.js's CSP nonce pattern actually work, see
   // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy.
   // Calling headers() also opts every route under this layout into dynamic rendering.
   await headers();
 
   return (
-    <html lang="en" className={`${hankenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/20 selection:text-primary">
         {children}
         <ServiceWorkerRegistrar />

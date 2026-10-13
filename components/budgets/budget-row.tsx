@@ -23,7 +23,9 @@ export function BudgetRow({
   monthStart,
   budgetId,
   progress,
+  currency,
 }: {
+  currency: string;
   category: Category;
   monthStart: string;
   budgetId: string | null;
@@ -57,9 +59,9 @@ export function BudgetRow({
         {hasBudget ? (
           <p className="text-sm tabular-nums text-foreground-muted">
             <span className={progress.isOverBudget ? "font-medium text-danger" : "font-medium text-foreground"}>
-              {formatCurrency(progress.spent)}
+              {formatCurrency(progress.spent, currency)}
             </span>{" "}
-            / {formatCurrency(progress.budgetAmount)}
+            / {formatCurrency(progress.budgetAmount, currency)}
           </p>
         ) : (
           <p className="text-sm text-foreground-muted">No budget set</p>

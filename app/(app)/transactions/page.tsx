@@ -1,3 +1,4 @@
+import { getProfile } from "@/lib/data/profile";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { listAccounts } from "@/lib/data/accounts";
@@ -47,7 +48,10 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
   } | null = null;
   let loadError = false;
 
+  let currency = "USD";
   try {
+    const profile = await getProfile(supabase, user.id);
+    currency = profile.currency;
     const [accounts, categories, transactionPage] = await Promise.all([
       listAccounts(supabase, user.id),
       listCategories(supabase),
@@ -103,7 +107,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
       </div>
 
       <div className="mt-4">
-        <TransactionList transactions={transactions} accounts={accounts} categories={categories} />
+        <TransactionList currency={currency} transactions={transactions} accounts={accounts} categories={categories} />
       </div>
 
       <div className="mt-4">

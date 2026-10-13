@@ -7,7 +7,7 @@ export interface PeriodTotals {
 }
 
 /**
- * Transfers are excluded from spending/income totals — they move money between
+ * Transfers are excluded from spending/income totals, they move money between
  * the user's own accounts and are not economic activity (docs/02 §6).
  */
 export function calculateNetChange(transactions: Transaction[]): PeriodTotals {
@@ -114,7 +114,7 @@ export function calculateTopMerchants(transactions: Transaction[], limit = 5): M
 
 /**
  * Running balance = opening balance + income − expenses, for transactions posted to this account.
- * Transfers are excluded, same as `calculateNetChange`/`calculateDailyTrend` — the `transactions`
+ * Transfers are excluded, same as `calculateNetChange`/`calculateDailyTrend`, the `transactions`
  * table has no destination account or in/out direction for a `transfer` row, just one `account_id`
  * and an always-positive `amount`, so a transfer can't be resolved to money in or out of the
  * account it's posted against without a schema change. Until one exists, a transfer won't move the

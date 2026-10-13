@@ -2,13 +2,13 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Clearledger — Personal Finance & Expense Tracker",
+    name: "Clearledger: personal expense tracker",
     short_name: "Clearledger",
     description:
       "Track everyday spending, understand your habits, and make financial decisions with confidence.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f9fc",
+    background_color: "#f4f0e6",
     theme_color: "#2452eb",
     icons: [
       {

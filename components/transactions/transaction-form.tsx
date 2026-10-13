@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 const initialState: TransactionActionState = { status: "idle" };
 const RECEIPT_ACCEPT = RECEIPT_ALLOWED_MIME_TYPES.join(",");
 
-/** Client-side pre-check only — matches, but does not replace, the bucket-level and
+/** Client-side pre-check only, matches, but does not replace, the bucket-level and
  * lib/data/receipts.ts server-side validation. Lets a bad file fail before an upload even starts. */
 function validateReceiptFile(file: File): string | null {
   if (!RECEIPT_ALLOWED_MIME_TYPES.includes(file.type as (typeof RECEIPT_ALLOWED_MIME_TYPES)[number])) {
@@ -159,7 +159,7 @@ export function TransactionForm({
         {transaction?.receipt_url ? (
           <p className="mb-1.5 flex items-center gap-1.5 text-xs text-foreground-muted">
             <Paperclip className="h-3.5 w-3.5" aria-hidden />
-            A receipt is already attached — choose a file to replace it.
+            A receipt is already attached, choose a file to replace it.
           </p>
         ) : null}
         <input
@@ -175,6 +175,12 @@ export function TransactionForm({
         />
         <p className="mt-1 text-xs text-foreground-muted">JPEG, PNG, WEBP, or PDF, up to 5 MB.</p>
         {receiptError ? <p className="mt-1.5 text-sm text-danger">{receiptError}</p> : null}
+        {transaction?.receipt_url ? (
+          <label className="mt-2 flex items-center gap-2 text-sm text-foreground-muted">
+            <input type="checkbox" name="removeReceipt" className="h-4 w-4 accent-primary" />
+            Remove the attached receipt
+          </label>
+        ) : null}
       </div>
 
       <div>

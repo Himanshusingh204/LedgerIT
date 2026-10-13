@@ -23,7 +23,7 @@ function extensionFor(mimeType: string): string {
 }
 
 /**
- * Uploads a receipt to the private `receipts` bucket and returns the storage PATH (not a URL) —
+ * Uploads a receipt to the private `receipts` bucket and returns the storage PATH (not a URL) , 
  * that's what's saved in transactions.receipt_url. Bucket-level `allowed_mime_types`/
  * `file_size_limit` (supabase/migrations/0005_receipts_storage.sql) are the real enforcement;
  * this also checks client-side-controllable values before the upload so a rejected file fails
@@ -53,7 +53,7 @@ export async function deleteReceipt(supabase: SupabaseClient<Database>, path: st
   if (error) throw error;
 }
 
-/** Never store or reuse this URL — it's generated fresh on demand and expires quickly (docs/02 §7: "Generate temporary signed URLs only when needed"). */
+/** Never store or reuse this URL, it's generated fresh on demand and expires quickly (docs/02 §7: "Generate temporary signed URLs only when needed"). */
 export async function getReceiptSignedUrl(supabase: SupabaseClient<Database>, path: string): Promise<string> {
   const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, SIGNED_URL_TTL_SECONDS);
   if (error) throw error;

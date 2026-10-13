@@ -17,11 +17,11 @@ export interface DashboardSnapshot {
   categorySpend: ReturnType<typeof calculateCategorySpend>;
   recentTransactions: Transaction[];
   accounts: Awaited<ReturnType<typeof listAccountsWithBalances>>;
-  /** Daily expense/income totals for the current period, oldest first — feeds the KPI sparklines. */
+  /** Daily expense/income totals for the current period, oldest first, feeds the KPI sparklines. */
   dailyTrend: ReturnType<typeof calculateDailyTrend>;
-  /** Always "this calendar month," independent of the range selector — matches how the Budgets page defines a month. */
+  /** Always "this calendar month," independent of the range selector, matches how the Budgets page defines a month. */
   monthlyBudget: ReturnType<typeof calculateBudgetProgress>;
-  /** True if the selected range has more transactions than were fetched — totals above are partial. */
+  /** True if the selected range has more transactions than were fetched, totals above are partial. */
   isTruncated: boolean;
 }
 

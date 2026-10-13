@@ -1,4 +1,4 @@
-# 02 — System Architecture
+# 02, System Architecture
 
 ## 1. Architecture style
 

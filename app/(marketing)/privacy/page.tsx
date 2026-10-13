@@ -10,7 +10,7 @@ export default function PrivacyPage() {
       <p className="mt-4 text-sm text-foreground-muted">
         Clearledger stores only the data you submit. Your transactions, accounts, budgets, and
         categories are isolated per user with row-level security in Supabase Postgres. We do not sell
-        personal data or connect to banks. You can delete your account from Settings at any time.
+        personal data or connect to banks. You can export your data to CSV at any time.
       </p>
       <h2 className="mt-8 text-lg font-semibold text-foreground">Data we store</h2>
       <ul className="mt-2 list-disc pl-5 text-sm text-foreground-muted">

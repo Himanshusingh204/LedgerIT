@@ -6,6 +6,7 @@ import { listCategories } from "@/lib/data/categories";
 import { ProfileForm } from "@/components/settings/profile-form";
 import { AccountList } from "@/components/settings/account-list";
 import { CategoryList } from "@/components/settings/category-list";
+import { DeleteAccountForm } from "@/components/settings/delete-account-form";
 
 export const metadata: Metadata = {
   title: "Settings",
@@ -57,16 +58,25 @@ export default async function SettingsPage() {
       <section className="mt-6 rounded-[var(--radius-surface)] border border-border bg-surface p-5">
         <h2 className="text-sm font-medium text-foreground-muted">Profile</h2>
         <div className="mt-4">
-          <ProfileForm profile={profile} />
+          <ProfileForm
+            key={`${profile.display_name}|${profile.currency}|${profile.timezone}`}
+            profile={profile}
+          />
         </div>
       </section>
 
       <section className="mt-4">
-        <AccountList accounts={accounts} />
+        <AccountList accounts={accounts} currency={profile.currency} />
       </section>
 
       <section className="mt-4">
         <CategoryList categories={categories} />
+      </section>
+      <section className="mt-6 rounded-[var(--radius-surface)] border border-danger/40 bg-surface p-5">
+        <h2 className="text-sm font-medium text-danger">Delete account</h2>
+        <div className="mt-4">
+          <DeleteAccountForm />
+        </div>
       </section>
     </div>
   );

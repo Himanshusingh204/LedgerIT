@@ -9,7 +9,7 @@ const STEPS = [
     icon: PlusCircle,
     step: "01",
     title: "Add what you spend",
-    body: "Log an expense or income entry in seconds — amount, category, account, done.",
+    body: "Log an expense or income entry in seconds: amount, category, account, done.",
     color: "bg-blue-700",
   },
   {
@@ -24,7 +24,7 @@ const STEPS = [
     step: "03",
     title: "Decide what's next",
     body: "See which budgets are on track, which merchants add up, and where to cut back this month.",
-    color: "bg-emerald-700",
+    color: "bg-primary",
   },
 ];
 
@@ -36,7 +36,7 @@ export function HowItWorks() {
     >
       <div className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 sm:py-24 lg:grid lg:grid-cols-[1fr_0.85fr] lg:items-center lg:gap-16 lg:px-8 lg:py-28">
 
-        {/* Left — stepper */}
+        {/* Left, stepper */}
         <div>
           <motion.div
             initial={{ opacity: 1, y: 20 }}
@@ -44,7 +44,7 @@ export function HowItWorks() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <p className="label-caps text-primary mb-3">How it works</p>
+            
             <h2 className="max-w-md text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Three steps, every time
             </h2>
@@ -72,7 +72,7 @@ export function HowItWorks() {
                   {/* Step indicator */}
                   <div className="relative flex-none">
                     <span
-                      className={`grid h-10 w-10 place-items-center rounded-full text-white text-sm font-bold shadow-md ${step.color}`}
+                      className={`grid h-10 w-10 place-items-center rounded-full text-primary-foreground text-sm font-bold shadow-md ${step.color}`}
                     >
                       {step.step}
                     </span>
@@ -93,7 +93,7 @@ export function HowItWorks() {
           </div>
         </div>
 
-        {/* Right — image */}
+        {/* Right, image */}
         <motion.div
           initial={{ opacity: 1, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}

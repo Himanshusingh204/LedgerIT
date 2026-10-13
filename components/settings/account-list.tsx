@@ -15,16 +15,23 @@ const ACCOUNT_TYPE_LABELS: Record<Account["type"], string> = {
   other: "Other",
 };
 
-export function AccountList({ accounts }: { accounts: Account[] }) {
-  const [pendingId, setPendingId] = useState<string | null>(null);
+export function AccountList({ accounts, currency }: {
+  currency: string; accounts: Account[] }) {
+  const [archiveError, setArchiveError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   function handleArchive(id: string) {
     if (!window.confirm("Archive this account? Its transaction history is kept.")) return;
-    setPendingId(id);
+    setArchiveError(null);
     startTransition(async () => {
-      await archiveAccountAction(id);
-      setPendingId(null);
+      try {
+        const result = await archiveAccountAction(id);
+        if (result.status === "error") setArchiveError(result.message ?? "Could not archive the account.");
+      } catch {
+        // Network failure reaching the server action: keep the UI usable and say so.
+        setArchiveError("Could not reach the server. Check your connection and try again.");
+      } finally {
+      }
     });
   }
 
@@ -50,13 +57,13 @@ export function AccountList({ accounts }: { accounts: Account[] }) {
                 </p>
                 <p className="text-xs text-foreground-muted">
                   {ACCOUNT_TYPE_LABELS[account.type]} · Opening balance:{" "}
-                  {formatCurrency(account.opening_balance, account.currency)}
+                  {formatCurrency(account.opening_balance, currency)}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => handleArchive(account.id)}
-                disabled={isPending && pendingId === account.id}
+                disabled={isPending}
                 aria-label={`Archive ${account.name}`}
                 className="flex items-center gap-1.5 rounded-[var(--radius-control)] px-2 py-1.5 text-xs font-medium text-foreground-muted hover:bg-surface-muted hover:text-foreground disabled:opacity-50"
               >
@@ -67,6 +74,12 @@ export function AccountList({ accounts }: { accounts: Account[] }) {
           ))}
         </ul>
       )}
+
+      {archiveError ? (
+        <p role="alert" className="mt-3 text-sm text-danger">
+          {archiveError}
+        </p>
+      ) : null}
 
       <div className="mt-4">
         <AddAccountForm />

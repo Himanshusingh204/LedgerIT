@@ -72,6 +72,12 @@ export function ProfileForm({ profile }: { profile: Profile }) {
         </select>
       </div>
 
+      {state.status === "success" ? (
+        <p role="status" className="text-sm text-success">
+          {state.message}
+        </p>
+      ) : null}
+
       {state.status === "error" ? (
         <p role="alert" className="text-sm text-danger">
           {state.message}

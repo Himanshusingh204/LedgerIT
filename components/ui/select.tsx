@@ -38,7 +38,7 @@ function useSelect() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   <Select> — root, manages open state + value
+   <Select>, root, manages open state + value
 ───────────────────────────────────────────────────────────── */
 interface SelectProps {
   value: string;
@@ -114,7 +114,7 @@ export function Select({ value, onValueChange, children, disabled = false }: Sel
 }
 
 /* ─────────────────────────────────────────────────────────────
-   <SelectTrigger> — the visible button that opens the dropdown
+   <SelectTrigger>, the visible button that opens the dropdown
 ───────────────────────────────────────────────────────────── */
 interface SelectTriggerProps {
   id?: string;
@@ -189,13 +189,13 @@ export function SelectTrigger({
 }
 
 /* ─────────────────────────────────────────────────────────────
-   <SelectValue> — renders selected label or placeholder
+   <SelectValue>, renders selected label or placeholder
 ───────────────────────────────────────────────────────────── */
 interface SelectValueProps {
   placeholder?: string;
 }
 
-// We need the option label — items register themselves with the context
+// We need the option label, items register themselves with the context
 // via a separate items-labels map. For simplicity, children of SelectItem
 // are text; we derive the displayed label from the matched item's rendered text
 // by letting SelectItem expose its label through a registry.
@@ -214,7 +214,7 @@ export function SelectValue({ placeholder = "Select…" }: SelectValueProps) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   <SelectContent> — the dropdown listbox
+   <SelectContent>, the dropdown listbox
 ───────────────────────────────────────────────────────────── */
 interface SelectContentProps {
   className?: string;
@@ -236,7 +236,7 @@ export function SelectContent({ className, children }: SelectContentProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const [labels, setLabels] = useState<Map<string, string>>(new Map());
 
-  // Register label helper — passed down via context
+  // Register label helper, passed down via context
   const registerLabel = useCallback((value: string, label: string) => {
     setLabels((prev) => {
       if (prev.get(value) === label) return prev;
@@ -319,7 +319,7 @@ export function SelectContent({ className, children }: SelectContentProps) {
 const LabelRegistryContext = createContext<((value: string, label: string) => void) | null>(null);
 
 /* ─────────────────────────────────────────────────────────────
-   <SelectItem> — a single option in the listbox
+   <SelectItem>, a single option in the listbox
 ───────────────────────────────────────────────────────────── */
 interface SelectItemProps {
   value: string;
@@ -391,7 +391,7 @@ export function SelectItem({ value, disabled = false, className, children }: Sel
 }
 
 /* ─────────────────────────────────────────────────────────────
-   <SelectSeparator> — optional visual divider between items
+   <SelectSeparator>, optional visual divider between items
 ───────────────────────────────────────────────────────────── */
 export function SelectSeparator({ className }: { className?: string }) {
   return <li role="separator" className={cn("my-1 h-px bg-border", className)} />;

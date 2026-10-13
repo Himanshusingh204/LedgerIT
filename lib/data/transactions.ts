@@ -49,12 +49,12 @@ export async function listTransactions(
 
 export interface TransactionsInRange {
   transactions: Transaction[];
-  /** True if more transactions exist in this range than were fetched — totals/charts below are partial. */
+  /** True if more transactions exist in this range than were fetched, totals/charts below are partial. */
   isTruncated: boolean;
 }
 
 // Dashboard/analytics/budgets all pull every transaction in a date range to compute totals
-// client-side (no SQL aggregation) — fine for realistic personal-finance volumes, but an unbounded
+// client-side (no SQL aggregation), fine for realistic personal-finance volumes, but an unbounded
 // query is a real risk for a pathological case (a compromised account, a future bulk CSV import,
 // an unusually long custom range). Capped rather than left open-ended.
 const MAX_TRANSACTIONS_PER_RANGE = 5000;
@@ -91,8 +91,8 @@ export interface CreateTransactionInput {
   merchant?: string;
   note?: string;
   occurredAt: string;
-  /** A storage path from lib/data/receipts.ts's uploadReceipt — never a URL, see that file. */
-  receiptUrl?: string;
+  /** A storage path from lib/data/receipts.ts's uploadReceipt, never a URL, see that file. */
+  receiptUrl?: string | null;
 }
 
 export async function createTransaction(
@@ -135,7 +135,7 @@ export async function updateTransaction(
       merchant: input.merchant,
       note: input.note,
       occurred_at: input.occurredAt,
-      ...(input.receiptUrl ? { receipt_url: input.receiptUrl } : {}),
+      ...(input.receiptUrl !== undefined ? { receipt_url: input.receiptUrl } : {}),
     })
     .eq("id", id)
     .select()

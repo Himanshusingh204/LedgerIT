@@ -9,7 +9,7 @@ export function FeedbackSection() {
             Tell us what&apos;s missing
           </h2>
           <p className="mt-4 text-base text-foreground-muted">
-            No support ticket queue, no bot — messages here go straight to the person building
+            No support ticket queue, no bot. Messages here go straight to the person building
             this.
           </p>
         </div>

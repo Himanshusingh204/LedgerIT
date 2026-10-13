@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/database";
 
-// Keep in sync with lib/supabase/client.ts — see the comment there for why `secure` is set
+// Keep in sync with lib/supabase/client.ts, see the comment there for why `secure` is set
 // explicitly (the library's own defaults never set it) and `httpOnly` deliberately isn't.
 const cookieOptions = { secure: process.env.NODE_ENV === "production" };
 
@@ -25,7 +25,7 @@ export async function createClient() {
             });
           } catch {
             // Called from a Server Component without a mutable cookie jar.
-            // Session refresh is handled by middleware instead — safe to ignore.
+            // Session refresh is handled by middleware instead, safe to ignore.
           }
         },
       },

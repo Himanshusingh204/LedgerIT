@@ -2,7 +2,8 @@ import { Store } from "lucide-react";
 import type { MerchantSpend } from "@/lib/finance/calculations";
 import { formatCurrency } from "@/lib/formatters/currency";
 
-export function TopMerchants({ merchants }: { merchants: MerchantSpend[] }) {
+export function TopMerchants({ merchants, currency }: {
+  currency: string; merchants: MerchantSpend[] }) {
   return (
     <div className="rounded-[var(--radius-surface)] border border-border bg-surface p-5">
       <h2 className="text-sm font-medium text-foreground-muted">Top merchants</h2>
@@ -17,7 +18,7 @@ export function TopMerchants({ merchants }: { merchants: MerchantSpend[] }) {
           {merchants.map((entry) => (
             <li key={entry.merchant} className="flex items-center justify-between py-2.5">
               <span className="text-sm text-foreground">{entry.merchant}</span>
-              <span className="text-sm font-medium tabular-nums text-foreground">{formatCurrency(entry.total)}</span>
+              <span className="text-sm font-medium tabular-nums text-foreground">{formatCurrency(entry.total, currency)}</span>
             </li>
           ))}
         </ul>

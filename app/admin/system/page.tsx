@@ -201,10 +201,10 @@ export default async function AdminSystemPage() {
                     </td>
                     <td className="px-6 py-3 capitalize">{log.target_type}</td>
                     <td className="px-6 py-3 font-mono text-[11px] text-foreground-muted">
-                      {log.target_id ? log.target_id.slice(0, 8) + "..." : "—"}
+                      {log.target_id ? log.target_id.slice(0, 8) + "..." : ", "}
                     </td>
                     <td className="px-6 py-3 text-right font-mono text-[10px]">
-                      {log.metadata ? JSON.stringify(log.metadata) : "—"}
+                      {log.metadata ? JSON.stringify(log.metadata) : ", "}
                     </td>
                   </tr>
                 ))

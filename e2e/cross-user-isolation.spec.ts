@@ -4,14 +4,14 @@ import { test, expect, type Page } from "@playwright/test";
  * Browser-driven complement to tests/integration/rls.test.ts. That suite hits the Supabase REST
  * API directly to prove the RLS *boundary* holds; this one drives two real signed-in sessions
  * through the actual app UI to prove a user never even sees a reachable link, button, or row that
- * would expose another user's data — the original Phase 10 (build) pass only checked this via raw
+ * would expose another user's data, the original Phase 10 (build) pass only checked this via raw
  * REST calls, never through the UI itself.
  */
 
 const password = "TestPassword123!";
 
 async function signUp(page: Page, name: string): Promise<string> {
-  // Assumes email confirmation is disabled locally — sign-up returns a live session immediately
+  // Assumes email confirmation is disabled locally, sign-up returns a live session immediately
   // and lands on /dashboard directly (see the same note in e2e/app-flow.spec.ts).
   const email = `isolation-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
   await page.goto("/sign-up");
@@ -48,7 +48,7 @@ test("user B never sees user A's account or transaction through the app", async 
   const pageB = await contextB.newPage();
   await signUp(pageB, "User B");
 
-  // B needs her own account — the "Add transaction" button below is disabled with zero accounts
+  // B needs her own account, the "Add transaction" button below is disabled with zero accounts
   // (components/transactions/add-transaction-button.tsx), which would make the dropdown check
   // unreachable regardless of whether isolation holds.
   await pageB.goto("/settings");
@@ -70,7 +70,7 @@ test("user B never sees user A's account or transaction through the app", async 
   await pageB.getByLabel("Search transactions by merchant").fill("Secret");
   await expect(pageB.getByText("No transactions")).toBeVisible();
 
-  // The account dropdown in B's own "add transaction" dialog must not list A's account either —
+  // The account dropdown in B's own "add transaction" dialog must not list A's account either , 
   // a select populated from the wrong query would leak its existence even if rows stayed hidden.
   await pageB.getByRole("button", { name: "Add transaction" }).click();
   const dialogB = pageB.getByRole("dialog");

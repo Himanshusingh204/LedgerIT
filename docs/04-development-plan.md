@@ -1,4 +1,4 @@
-# 04 — Development Plan
+# 04, Development Plan
 
 ## 1. Delivery strategy
 
@@ -14,7 +14,7 @@ A vertical slice should include:
 
 This reduces the chance of a beautiful UI sitting on incomplete business logic.
 
-## 2. Phase 0 — Project foundation
+## 2. Phase 0, Project foundation
 
 Deliver:
 - Next.js TypeScript app
@@ -32,7 +32,7 @@ Exit criteria:
 - production build succeeds
 - no secrets committed
 
-## 3. Phase 1 — Authentication + profile
+## 3. Phase 1, Authentication + profile
 
 Deliver:
 - sign up/sign in/sign out
@@ -46,7 +46,7 @@ Tests:
 - unauthenticated protection
 - profile creation
 
-## 4. Phase 2 — Accounts + transactions
+## 4. Phase 2, Accounts + transactions
 
 Deliver:
 - accounts CRUD
@@ -63,7 +63,7 @@ Tests:
 - archived accounts handled correctly
 - transaction totals are correct
 
-## 5. Phase 3 — Dashboard
+## 5. Phase 3, Dashboard
 
 Deliver:
 - summary metrics
@@ -77,7 +77,7 @@ Deliver:
 Important:
 Dashboard should consume real queries, not duplicated client-side mock logic.
 
-## 6. Phase 4 — Budgets + analytics
+## 6. Phase 4, Budgets + analytics
 
 Deliver:
 - budget CRUD
@@ -92,7 +92,7 @@ Tests:
 - month boundaries
 - timezone edge cases
 
-## 7. Phase 5 — Home page + carousel + polish
+## 7. Phase 5, Home page + carousel + polish
 
 Deliver:
 - responsive marketing page
@@ -105,7 +105,7 @@ Deliver:
 
 Use the supplied reference for visual direction but create an original layout.
 
-## 8. Phase 6 — Export + production hardening
+## 8. Phase 6, Export + production hardening
 
 Deliver:
 - filtered CSV export

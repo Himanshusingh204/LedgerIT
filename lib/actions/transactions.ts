@@ -5,7 +5,7 @@ import type { ZodError } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { transactionFormSchema } from "@/lib/validations/transaction";
 import { createTransaction, deleteTransaction, updateTransaction } from "@/lib/data/transactions";
-import { uploadReceipt } from "@/lib/data/receipts";
+import { deleteReceipt, uploadReceipt } from "@/lib/data/receipts";
 
 export interface TransactionActionState {
   status: "idle" | "error";
@@ -72,7 +72,7 @@ export async function updateTransactionAction(
   }
 
   // Ownership of `id` is enforced by RLS (auth.uid() = user_id on the transactions table), not by
-  // an explicit check here — do not "optimize" this by switching to a service-role client, which
+  // an explicit check here, do not "optimize" this by switching to a service-role client, which
   // would bypass that check silently.
   const supabase = await createClient();
   const {
@@ -83,7 +83,13 @@ export async function updateTransactionAction(
   }
 
   try {
-    const receiptUrl = await uploadReceiptIfProvided(supabase, user.id, formData);
+    let receiptUrl: string | null | undefined = await uploadReceiptIfProvided(supabase, user.id, formData);
+    if (formData.get("removeReceipt") === "on") {
+      // Read the stored path under RLS, delete the file, then clear the link on the row.
+      const { data: existing } = await supabase.from("transactions").select("receipt_url").eq("id", id).single();
+      if (existing?.receipt_url) await deleteReceipt(supabase, existing.receipt_url);
+      receiptUrl = null;
+    }
     await updateTransaction(supabase, id, { ...parsed.data, receiptUrl });
   } catch (error) {
     console.error("[action:transactions] updateTransaction failed", {
@@ -128,7 +134,7 @@ function flattenFieldErrors(error: ZodError) {
   return result;
 }
 
-/** Empty file inputs still submit a zero-byte File in FormData — size>0 is how "no file chosen" is told apart from a real upload. */
+/** Empty file inputs still submit a zero-byte File in FormData, size>0 is how "no file chosen" is told apart from a real upload. */
 async function uploadReceiptIfProvided(
   supabase: Awaited<ReturnType<typeof createClient>>,
   userId: string,
@@ -141,7 +147,7 @@ async function uploadReceiptIfProvided(
 
 function receiptErrorMessage(error: unknown): string {
   // uploadReceipt throws a plain Error with a user-facing message for validation failures
-  // (wrong type, too large) — everything else (a real DB/storage error) gets a generic message,
+  // (wrong type, too large), everything else (a real DB/storage error) gets a generic message,
   // same as every other catch block in this file.
   if (error instanceof Error && (error.message.includes("JPEG") || error.message.includes("5 MB"))) {
     return error.message;

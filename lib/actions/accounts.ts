@@ -55,13 +55,16 @@ export async function createAccountAction(
   return { status: "idle" };
 }
 
-export async function archiveAccountAction(id: string): Promise<void> {
+export async function archiveAccountAction(id: string): Promise<AccountActionState> {
   try {
     const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return { status: "error", message: "Your session expired. Please sign in again." };
+    }
     await archiveAccount(supabase, id);
-    revalidatePath("/dashboard");
-    revalidatePath("/settings");
-    revalidatePath("/transactions");
   } catch (error) {
     console.error("[action:accounts] archiveAccount failed", {
       accountId: id,
@@ -69,6 +72,11 @@ export async function archiveAccountAction(id: string): Promise<void> {
       error: error instanceof Error ? error.message : String(error),
       ts: new Date().toISOString(),
     });
-    throw error;
+    return { status: "error", message: "Could not archive the account. Please try again." };
   }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/settings");
+  revalidatePath("/transactions");
+  return { status: "idle" };
 }

@@ -13,10 +13,12 @@ export function SiteFooter() {
         </Link>
 
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-foreground-muted">
-          <a href="#why" className="hover:text-foreground">Why Clearledger</a>
-          <a href="#how-it-works" className="hover:text-foreground">How it works</a>
-          <a href="#features" className="hover:text-foreground">Features</a>
-          <a href="#feedback" className="hover:text-foreground">Feedback</a>
+          <Link href="/features" className="hover:text-foreground">Features</Link>
+          <Link href="/pricing" className="hover:text-foreground">Pricing</Link>
+          <Link href="/about" className="hover:text-foreground">About</Link>
+          <Link href="/security" className="hover:text-foreground">Security</Link>
+          <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+          <Link href="/terms" className="hover:text-foreground">Terms</Link>
           <Link href="/sign-in" className="hover:text-foreground">Sign in</Link>
         </nav>
 

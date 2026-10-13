@@ -1,4 +1,4 @@
-# 03 — UI / UX Design System
+# 03, UI / UX Design System
 
 ## 1. Design direction
 

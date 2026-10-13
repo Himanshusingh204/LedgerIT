@@ -5,7 +5,7 @@ import path from "node:path";
 
 export default defineConfig({
   plugins: [react()],
-  // Unlike Next.js, Vite/Vitest don't auto-load .env.local — needed so
+  // Unlike Next.js, Vite/Vitest don't auto-load .env.local, needed so
   // tests/integration/*.test.ts can see NEXT_PUBLIC_SUPABASE_URL etc. and actually run against the
   // local Supabase stack instead of silently skipping (see CLAUDE.md §9 to start that stack).
   test: {

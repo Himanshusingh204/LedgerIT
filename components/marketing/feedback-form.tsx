@@ -40,7 +40,7 @@ export function FeedbackForm() {
           required
           rows={4}
           maxLength={2000}
-          placeholder="A bug, a feature idea, or just what you think — we read all of it."
+          placeholder="A bug, a feature idea, or just what you think. We read all of it."
           className="w-full rounded-[var(--radius-control)] border border-border bg-surface px-3 py-2 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none"
         />
       </div>

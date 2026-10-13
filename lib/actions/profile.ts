@@ -6,7 +6,7 @@ import { profileFormSchema } from "@/lib/validations/profile";
 import { updateProfile } from "@/lib/data/profile";
 
 export interface ProfileActionState {
-  status: "idle" | "error";
+  status: "idle" | "success" | "error";
   message?: string;
 }
 
@@ -48,7 +48,7 @@ export async function updateProfileAction(
     return { status: "error", message: "Could not update your profile. Please try again." };
   }
 
-  revalidatePath("/settings");
-  revalidatePath("/dashboard");
-  return { status: "idle" };
+  // Currency and timezone affect every money-bearing page, so revalidate the whole app.
+  revalidatePath("/", "layout");
+  return { status: "success", message: "Profile saved." };
 }

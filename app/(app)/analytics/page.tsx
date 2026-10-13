@@ -52,9 +52,11 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
   let trend = calculateDailyTrend([]);
   let topMerchants = calculateTopMerchants([]);
   let isTruncated = false;
+  let currency = "USD";
 
   try {
     const profile = await getProfile(supabase, user.id);
+    currency = profile.currency;
     const currentRange = buildDateRange(range, profile.timezone);
     const previousRange = calculatePreviousPeriod(currentRange);
 
@@ -94,24 +96,24 @@ export default async function AnalyticsPage({ searchParams }: AnalyticsPageProps
 
       {isTruncated ? (
         <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
-          This period has more transactions than can be shown at once — totals and charts below
+          This period has more transactions than can be shown at once, totals and charts below
           reflect only part of it. Try a narrower date range for exact numbers.
         </p>
       ) : null}
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <KpiCard label="Income" value={totals.incomeTotal} previousValue={previousTotals.incomeTotal} tone="positive" />
-        <KpiCard label="Expenses" value={totals.expenseTotal} previousValue={previousTotals.expenseTotal} tone="negative" />
-        <KpiCard label="Net change" value={totals.netChange} previousValue={previousTotals.netChange} />
+        <KpiCard currency={currency} label="Income" value={totals.incomeTotal} previousValue={previousTotals.incomeTotal} tone="positive" />
+        <KpiCard currency={currency} label="Expenses" value={totals.expenseTotal} previousValue={previousTotals.expenseTotal} tone="negative" />
+        <KpiCard currency={currency} label="Net change" value={totals.netChange} previousValue={previousTotals.netChange} />
       </div>
 
       <div className="mt-4">
-        <TrendChart trend={trend} />
+        <TrendChart currency={currency} trend={trend} />
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <CategorySpendChart categorySpend={categorySpend} categories={categories} />
-        <TopMerchants merchants={topMerchants} />
+        <CategorySpendChart currency={currency} categorySpend={categorySpend} categories={categories} />
+        <TopMerchants currency={currency} merchants={topMerchants} />
       </div>
     </div>
   );

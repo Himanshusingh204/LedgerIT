@@ -42,9 +42,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   let snapshot: Awaited<ReturnType<typeof getDashboardSnapshot>> | null = null;
   let categories: Awaited<ReturnType<typeof listCategories>> = [];
   let loadError = false;
+  let currency = "USD";
 
   try {
     const profile = await getProfile(supabase, user.id);
+    currency = profile.currency;
     [snapshot, categories] = await Promise.all([
       getDashboardSnapshot(supabase, user.id, profile.timezone, range),
       listCategories(supabase),
@@ -75,39 +77,39 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
       {snapshot.isTruncated ? (
         <p role="alert" className="mt-4 rounded-[var(--radius-control)] bg-danger/10 px-3 py-2 text-sm text-danger">
-          This period has more transactions than can be shown at once — totals and charts below
+          This period has more transactions than can be shown at once, totals and charts below
           reflect only part of it. Try a narrower date range for exact numbers.
         </p>
       ) : null}
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
+        <KpiCard currency={currency}
           label="Income"
           value={snapshot.totals.incomeTotal}
           previousValue={snapshot.previousTotals.incomeTotal}
           tone="positive"
           trend={snapshot.dailyTrend.map((point) => point.incomeTotal)}
         />
-        <KpiCard
+        <KpiCard currency={currency}
           label="Expenses"
           value={snapshot.totals.expenseTotal}
           previousValue={snapshot.previousTotals.expenseTotal}
           tone="negative"
           trend={snapshot.dailyTrend.map((point) => point.expenseTotal)}
         />
-        <KpiCard label="Net change" value={snapshot.totals.netChange} previousValue={snapshot.previousTotals.netChange} />
-        <BudgetMeter progress={snapshot.monthlyBudget} />
+        <KpiCard currency={currency} label="Net change" value={snapshot.totals.netChange} previousValue={snapshot.previousTotals.netChange} />
+        <BudgetMeter currency={currency} progress={snapshot.monthlyBudget} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <CategorySpendChart categorySpend={snapshot.categorySpend} categories={categories} />
+          <CategorySpendChart currency={currency} categorySpend={snapshot.categorySpend} categories={categories} />
         </div>
-        <AccountsSummary accounts={snapshot.accounts} />
+        <AccountsSummary currency={currency} accounts={snapshot.accounts} />
       </div>
 
       <div className="mt-4">
-        <RecentTransactions
+        <RecentTransactions currency={currency}
           transactions={snapshot.recentTransactions}
           categories={categories}
           accounts={snapshot.accounts}

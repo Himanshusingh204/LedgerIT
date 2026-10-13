@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 /**
  * End-to-end happy path from docs/04-development-plan.md §E2E. Requires a live Supabase
- * project wired up via .env.local — this suite cannot run against the placeholder client.
+ * project wired up via .env.local, this suite cannot run against the placeholder client.
  * Each run signs up a fresh user (timestamped email) since there's no test-data reset yet.
  */
 
@@ -17,7 +17,7 @@ test.describe("core app flow", () => {
     });
 
     // Assumes email confirmation is disabled in the Supabase project's auth settings for
-    // local/dev testing — sign-up returns a live session immediately and lands on /dashboard
+    // local/dev testing, sign-up returns a live session immediately and lands on /dashboard
     // directly (components/auth/sign-up-form.tsx branches on this). Otherwise it shows a "check
     // your email" screen instead and this step would need to confirm the email first.
     await test.step("sign up", async () => {
@@ -90,7 +90,7 @@ test.describe("core app flow", () => {
       const download = await downloadPromise;
       expect(download.suggestedFilename()).toMatch(/^transactions-.*\.csv$/);
 
-      // The list is still filtered to "Grocery" from the previous step — the export should
+      // The list is still filtered to "Grocery" from the previous step, the export should
       // respect that filter (lib/data/transactions.ts's export route reads the same query params
       // the ledger page does), so the CSV should contain the grocery expense and NOT the income.
       const stream = await download.createReadStream();
@@ -129,7 +129,7 @@ test.describe("core app flow", () => {
 
     await test.step("archive the account", async () => {
       await page.goto("/settings");
-      // account-list.tsx confirms via window.confirm() before archiving — Playwright auto-dismisses
+      // account-list.tsx confirms via window.confirm() before archiving, Playwright auto-dismisses
       // browser dialogs unless a handler explicitly accepts them.
       page.once("dialog", (dialog) => dialog.accept());
       await page.getByRole("button", { name: "Archive Everyday checking" }).click();

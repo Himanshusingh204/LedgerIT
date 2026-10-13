@@ -1,7 +1,7 @@
 const WIDTH = 120;
 const HEIGHT = 28;
 
-/** A stat-tile trend sparkline — see dataviz skill's "Stat tile (value + delta + sparkline)" form. */
+/** A stat-tile trend sparkline, see dataviz skill's "Stat tile (value + delta + sparkline)" form. */
 export function Sparkline({ values, className = "text-primary" }: { values: number[]; className?: string }) {
   if (values.length < 2) return null;
 

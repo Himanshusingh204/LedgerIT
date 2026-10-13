@@ -34,7 +34,7 @@ export function SignUpForm({ nonce }: { nonce?: string }) {
   } = useForm<SignUpValues>({ resolver: zodResolver(signUpSchema) });
 
   // Turnstile calls these by name (data-callback/data-expired-callback), so they have to live on
-  // window rather than as plain React closures — the widget is rendered outside React's control.
+  // window rather than as plain React closures, the widget is rendered outside React's control.
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
     window.onTurnstileVerify = (token: string) => setCaptchaToken(token);
@@ -74,7 +74,7 @@ export function SignUpForm({ nonce }: { nonce?: string }) {
     }
 
     // Supabase returns a live session immediately when email confirmation is disabled (e.g. this
-    // project's local stack) — in that case there's nothing to "check email" for, so go straight
+    // project's local stack), in that case there's nothing to "check email" for, so go straight
     // in instead of showing a confirmation screen that would never resolve.
     if (data.session) {
       router.replace("/dashboard");

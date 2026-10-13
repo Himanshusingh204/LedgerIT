@@ -13,7 +13,9 @@ const TOP_N = 3;
 export function CategorySpendChart({
   categorySpend,
   categories,
+  currency,
 }: {
+  currency: string;
   categorySpend: CategorySpend[];
   categories: Category[];
 }) {
@@ -41,7 +43,7 @@ export function CategorySpendChart({
     <div className="card-surface p-5">
       <h2 className="label-caps text-foreground-muted">Spending by category</h2>
 
-      {/* Screen-reader-only data table — the chart below is an SVG with no accessible text
+      {/* Screen-reader-only data table, the chart below is an SVG with no accessible text
           equivalent for its bar values (the legend only names categories, not amounts). */}
       <table className="sr-only">
         <caption>Spending by category</caption>
@@ -55,7 +57,7 @@ export function CategorySpendChart({
           {data.map((entry) => (
             <tr key={entry.name}>
               <th scope="row">{entry.name}</th>
-              <td>{formatCurrency(entry.total)}</td>
+              <td>{formatCurrency(entry.total, currency)}</td>
             </tr>
           ))}
         </tbody>
@@ -75,7 +77,7 @@ export function CategorySpendChart({
             />
             <Tooltip
               cursor={{ fill: "var(--surface-muted)" }}
-              formatter={(value) => formatCurrency(Number(value))}
+              formatter={(value) => formatCurrency(Number(value), currency)}
               contentStyle={{
                 borderRadius: "var(--radius-control)",
                 border: "1px solid var(--border)",
@@ -90,7 +92,7 @@ export function CategorySpendChart({
               <LabelList
                 dataKey="total"
                 position="right"
-                formatter={(value) => formatCurrency(Number(value))}
+                formatter={(value) => formatCurrency(Number(value), currency)}
                 style={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 500 }}
               />
             </Bar>

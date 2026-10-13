@@ -1,4 +1,4 @@
-# 01 — Product Requirements
+# 01, Product Requirements
 
 ## 1. Product vision
 

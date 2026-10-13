@@ -1,142 +1,87 @@
 "use client";
 
-import {
-  CalendarRange,
-  Download,
-  PieChart,
-  ReceiptText,
-  Wallet2,
-  BellRing,
-} from "lucide-react";
-import { motion, type Variants } from "motion/react";
+import { BarChart3, FileDown, PiggyBank, Receipt, ShieldCheck, Wallet, Tags, Paperclip } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import type { ReactNode } from "react";
 
-interface Feature {
-  icon: React.ElementType;
+type Feature = {
   title: string;
   body: string;
-  wide?: boolean;
-  gradient: string;
-  iconBg: string;
-}
+  icon: typeof Receipt;
+  span: string;
+  visual?: ReactNode;
+  tinted?: boolean;
+};
 
-const FEATURES: Feature[] = [
+const features: Feature[] = [
   {
-    icon: ReceiptText,
-    title: "Full transaction ledger",
-    body: "Search, filter, and paginate every expense, income, and transfer — with categories and accounts attached.",
-    wide: true,
-    gradient: "from-blue-500/10 via-blue-400/5 to-transparent",
-    iconBg: "bg-blue-500/15 text-blue-600",
+    title: "Log an expense in seconds",
+    body: "Amount, category, account, done. The ledger stays fast even with years of history.",
+    icon: Receipt,
+    span: "md:col-span-2 md:row-span-2",
+    tinted: true,
+    visual: (
+      <div className="mt-8 space-y-2.5" aria-hidden="true">
+        {["Coffee · Dining", "Monthly transit pass · Transport", "Weekly groceries · Groceries"].map((t, i) => (
+          <div
+            key={t}
+            className="flex items-center justify-between rounded-xl border border-border bg-surface-muted/60 px-4 py-3 text-sm"
+            style={{ transform: `translateX(${i * 10}px)` }}
+          >
+            <span className="text-foreground-muted">{t}</span>
+            <span className="text-num text-foreground">-${[4.8, 96, 142.3][i]}</span>
+          </div>
+        ))}
+      </div>
+    ),
   },
-  {
-    icon: PieChart,
-    title: "Category breakdowns",
-    body: "See exactly which categories are eating the budget this month, ranked by real spend.",
-    gradient: "from-blue-600/10 via-blue-500/5 to-transparent",
-    iconBg: "bg-blue-600/15 text-blue-700 dark:text-blue-400",
-  },
-  {
-    icon: BellRing,
-    title: "Budget warnings",
-    body: "Categories that go over budget are flagged clearly, not buried in a table.",
-    gradient: "from-amber-500/10 via-amber-400/5 to-transparent",
-    iconBg: "bg-amber-500/15 text-amber-600",
-  },
-  {
-    icon: Wallet2,
-    title: "Multiple accounts",
-    body: "Cash, bank, debit, or credit — track balances across every account you actually use.",
-    gradient: "from-teal-500/10 via-teal-400/5 to-transparent",
-    iconBg: "bg-teal-500/15 text-teal-600",
-  },
-  {
-    icon: CalendarRange,
-    title: "Flexible date ranges",
-    body: "Week, month, quarter, or year — every chart and total respects the period you pick.",
-    gradient: "from-slate-600/15 via-slate-500/5 to-transparent",
-    iconBg: "bg-slate-600/15 text-slate-800 dark:text-slate-300",
-  },
-  {
-    icon: Download,
-    title: "CSV export",
-    body: "Export the exact filtered view for taxes, records, or your own spreadsheet.",
-    wide: true,
-    gradient: "from-emerald-500/10 via-emerald-400/5 to-transparent",
-    iconBg: "bg-emerald-500/15 text-emerald-600",
-  },
+  { title: "Budgets that move with you", body: "Set a monthly limit per category and watch progress update as you spend.", icon: PiggyBank, span: "" },
+  { title: "Every account, one view", body: "Cash, cards, and savings in one place with balances that stay in sync.", icon: Wallet, span: "" },
+  { title: "Spending analytics", body: "Trends, category breakdowns, and your top merchants, by any date range.", icon: BarChart3, span: "md:col-span-2" },
+  { title: "Smart categories", body: "Built-in categories you can rename, recolour, or extend to match how you spend.", icon: Tags, span: "" },
+  { title: "Receipts attached", body: "Keep a photo next to the expense it belongs to. Stored privately, shown only to you.", icon: Paperclip, span: "" },
+  { title: "Export any time", body: "CSV export respects your current filters, so tax prep takes minutes.", icon: FileDown, span: "" },
+  { title: "Private by design", body: "Row-level security on every table means no one else can read your data, including us.", icon: ShieldCheck, span: "md:col-span-2", tinted: true },
 ];
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
-const cardVariants: Variants = {
-  hidden: { opacity: 1, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+function Card({ f, index }: { f: Feature; index: number }) {
+  const reduce = useReducedMotion();
+  const Icon = f.icon;
+  return (
+    <motion.article
+      className={`card-surface group relative overflow-hidden p-6 transition-colors hover:border-primary/40 sm:p-7 ${f.span} ${f.tinted ? "bg-primary-subtle/60" : ""}`}
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 4) * 0.07, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100 opacity-60"
+        aria-hidden="true"
+      />
+      <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/20">
+        <Icon className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <h3 className="relative mt-5 text-lg font-semibold text-foreground">{f.title}</h3>
+      <p className="relative mt-2 text-sm leading-relaxed text-foreground-muted">{f.body}</p>
+      {f.visual ? <div className="relative">{f.visual}</div> : null}
+    </motion.article>
+  );
+}
 
 export function FeatureHighlights() {
   return (
-    <section
-      id="features"
-      className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
-    >
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 1, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mb-14 max-w-2xl"
-      >
-        <p className="label-caps text-primary mb-3">Features</p>
-        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Everything a household budget actually needs
+    <section id="features" className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <div className="max-w-2xl">
+        <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          What is inside
         </h2>
-        <p className="mt-4 text-base text-foreground-muted">
-          No bank linking, no investment tracking, no gimmicks — just the tools that make
-          tracking spending sustainable.
-        </p>
-      </motion.div>
-
-      {/* Bento grid */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {FEATURES.map((feature) => (
-          <motion.div
-            key={feature.title}
-            variants={cardVariants}
-            className={[
-              "group relative overflow-hidden rounded-[var(--radius-surface-lg)] border border-border bg-surface p-6",
-              "transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]",
-              feature.wide ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : "",
-            ].join(" ")}
-          >
-            {/* Gradient splash on hover */}
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
-              aria-hidden="true"
-            />
-
-            <div className="relative">
-              {/* Icon */}
-              <span
-                className={`inline-grid h-10 w-10 place-items-center rounded-[var(--radius-control)] text-sm ${feature.iconBg}`}
-              >
-                <feature.icon className="h-5 w-5" aria-hidden="true" />
-              </span>
-
-              <h3 className="mt-4 text-sm font-semibold text-foreground">{feature.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-foreground-muted">{feature.body}</p>
-            </div>
-          </motion.div>
+      </div>
+      <div className="mt-12 grid gap-4 md:grid-cols-4 md:auto-rows-[minmax(14rem,auto)]">
+        {features.map((f, i) => (
+          <Card key={f.title} f={f} index={i} />
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -13,7 +13,9 @@ function amountTone(type: Transaction["type"]) {
 export function RecentTransactions({
   transactions,
   categories,
+  currency,
 }: {
+  currency: string;
   transactions: Transaction[];
   categories: Category[];
   accounts: Account[];
@@ -45,12 +47,12 @@ export function RecentTransactions({
                     <CategoryIcon icon={category?.icon ?? "circle"} className="h-[18px] w-[18px]" />
                   </span>
                   <div>
-                    <p className="text-sm font-medium text-foreground">{transaction.merchant || "—"}</p>
+                    <p className="text-sm font-medium text-foreground">{transaction.merchant || ", "}</p>
                     <p className="label-caps text-foreground-muted">{category?.name ?? "Uncategorized"}</p>
                   </div>
                 </div>
                 <span className={`text-num text-sm font-medium ${amountTone(transaction.type)}`}>
-                  {formatSignedCurrency(transaction.type === "expense" ? -transaction.amount : transaction.amount, transaction.currency)}
+                  {formatSignedCurrency(transaction.type === "expense" ? -transaction.amount : transaction.amount, currency)}
                 </span>
               </li>
             );
